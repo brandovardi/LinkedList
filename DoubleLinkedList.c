@@ -1,30 +1,32 @@
-#include "LinkedList.h"
+#include "DoubleLinkedList.h"
 
 LinkedList *newLinkedList(DataType data_type)
 {
-    LinkedList *list = NULL;
+    LinkedList *this = NULL;
     if (data_type == INT || data_type == FLOAT || data_type == DOUBLE || data_type == CHAR || data_type == STRING)
     {
-        list = (LinkedList *)malloc(sizeof(LinkedList));
-        list->head = NULL;
-        list->data_type = data_type;
+        this = (LinkedList *)malloc(sizeof(LinkedList));
+        this->head = NULL;
+        this->last = NULL;
+        this->size = 0;
+        this->data_type = data_type;
         if (data_type == INT)
-            list->data_size = sizeof(int);
+            this->data_size = sizeof(int);
         else if (data_type == FLOAT)
-            list->data_size = sizeof(float);
+            this->data_size = sizeof(float);
         else if (data_type == DOUBLE)
-            list->data_size = sizeof(double);
+            this->data_size = sizeof(double);
         else if (data_type == CHAR)
-            list->data_size = sizeof(char);
+            this->data_size = sizeof(char);
         else if (data_type == STRING)
-            list->data_size = sizeof(char *);
+            this->data_size = sizeof(char *);
     }
     else if (data_type != INT && data_type != FLOAT && data_type != DOUBLE && data_type != CHAR && data_type != STRING)
         printf("Error: data_type is not valid\n");
-    return list;
+    return this;
 }
 
-bool add_at_index(LinkedList *list, void *data, int index, size_t data_size)
+bool insert_at(LinkedList *list, void *data, int index, size_t data_size)
 {
     bool res = false;
     if (list != NULL && data != NULL && list->data_size == data_size && index >= 0)
@@ -53,6 +55,7 @@ bool add_at_index(LinkedList *list, void *data, int index, size_t data_size)
             curr->next = newNode;
             res = true;
         }
+        (!res) ?: (list->size++);
     }
     else if (list == NULL || data == NULL || list->data_size != data_size || index < 0)
         printf("Error: empty list or invalid data or invalid index.\n");
@@ -77,6 +80,7 @@ bool add_in_front(LinkedList *list, void *data, size_t data_size)
         // aggiorno in ogni caso la testa
         list->head = newNode;
         res = true;
+        list->size++;
     }
     else
         printf("Error: empty list or invalid data.\n");
@@ -105,6 +109,7 @@ bool add(LinkedList *list, void *data, size_t data_size)
             curr->next = newNode;
         }
         res = true;
+        list->size++;
     }
     else
         printf("Error: empty list or invalid data.\n");
@@ -135,6 +140,7 @@ bool remove_last(LinkedList *list)
             curr->next = NULL;
             res = true;
         }
+        (res && list->size > 0) ? (list->size--) : 0;
     }
     else if (list != NULL || list->head == NULL)
         printf("Error: the list is empty\n");
@@ -165,6 +171,7 @@ bool remove_head(LinkedList *list)
             list->head = headNext;
         }
         res = true;
+        (list->size > 0) ? (list->size--) : 0;
     }
     else if (list != NULL || list->head == NULL)
         printf("Error: the list is empty\n");
@@ -201,6 +208,7 @@ bool remove_at(LinkedList *list, int index)
             free(del);
             res = true;
         }
+        (res && list->size > 0) ? (list->size--) : 0;
     }
     else if (list != NULL || list->head == NULL || index < 0)
         printf("Error: empty list or invalid index.\n");
@@ -222,6 +230,7 @@ bool free_list(LinkedList *list)
         }
         free(list);
         res = true;
+        list->size = 0;
     }
     else if (list != NULL || list->head == NULL)
         printf("Error: the list is empty\n");
@@ -297,16 +306,33 @@ void print_list(LinkedList *list)
         printf("Error: the list is empty\n");
 }
 
+void *get_first(LinkedList *list)
+{
+    
+    switch (list->data_type)
+    {
+    case INT:
+        break;
+    case FLOAT:
+        break;
+    case DOUBLE:
+        break;
+    case CHAR:
+        break;
+    case STRING:
+        break;
+    default:
+        break;
+    }
+}
+
+void *get_last(LinkedList *list)
+{
+}
+
 int size_of(LinkedList *list)
 {
     int size = 0;
-    if (list != NULL && list->head != NULL)
-    {
-        for (Node *curr = list->head; curr->next != NULL; curr = curr->next, size++)
-            ;
-        size++;
-    }
-    else if (list != NULL || list->head == NULL)
-        printf("Error: the list is empty\n");
+    (list != NULL && list->head != NULL) ? (size = list->size) : printf("Error: the list is empty.\n");
     return size;
 }
