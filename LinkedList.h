@@ -36,30 +36,29 @@ typedef struct LinkedList
 LinkedList *newLinkedList(DataType data_type);
 
 bool insert_at(LinkedList *, void *, int, size_t);
-bool add_in_front(LinkedList *, void *, size_t);
+bool add_first(LinkedList *, void *, size_t);
 bool add(LinkedList *, void *, size_t);
-bool free_list(LinkedList *);
+bool clear(LinkedList *);
 bool remove_last(LinkedList *);
 bool remove_head(LinkedList *);
 bool remove_at(LinkedList *, int);
 bool replace_head(LinkedList *, void *, size_t);
 bool replace_at(LinkedList *, void *, int, size_t);
 void print_list(LinkedList *);
-void *get_first(LinkedList *);
-void *get_last(LinkedList *);
+void get(LinkedList *, int);
 int size_of(LinkedList *);
 
 #define InsertAt(list, data, index) \
     insert_at(list, &data, index, sizeof(data))
 
-#define AddInFront(list, data) \
-    add_in_front(list, &data, sizeof(data))
+#define AddFirst(list, data) \
+    add_first(list, &data, sizeof(data))
 
 #define Add(list, data) \
     add(list, &data, sizeof(data))
 
-#define FreeList(list) \
-    free_list(list)
+#define Clear(list) \
+    clear(list)
 
 #define RemoveLast(list) \
     remove_last(list)
@@ -76,16 +75,23 @@ int size_of(LinkedList *);
 #define ReplaceAt(list, data, index) \
     replace_at(list, &data, index, sizeof(data))
 
-#define GetFirst(list) \
-    get_first(list)
+#define GetHead(list) ( \
+    ((list) == NULL || (list)->head == NULL) ? NULL : (*(typeof((list)->head->data))((list)->head->data)))
 
-#define GetLast(list) \
-    get_last(list)
+// non creo la funzione get_head(...) perché avendo un tipo generico per i valori della lista
+// dovrei ritornare un puntatore void (castato poi al tipo di data_type della lista)
+// quindi voglio evitare che un poi io mi debba gestire i puntatori dal main
+// così facendo invece vado a prendere direttamente il valore contenuto
+#define GetLast(list) ( \
+    ((list) == NULL || (list)->last == NULL) ? NULL : (*(typeof((list)->last->data))((list)->last->data)))
+
+#define Get(list, index) \
+        get(list, index)
 
 #define PrintList(list) \
-    print_list(list)
+        print_list(list)
 
 #define SizeOf(list) \
-    size_of(list)
+        size_of(list)
 
 #endif

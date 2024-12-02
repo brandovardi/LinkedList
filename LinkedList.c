@@ -36,6 +36,9 @@ bool insert_at(LinkedList *list, void *data, int index, size_t data_size)
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
         memcpy(newNode->data, data, list->data_size);
+        newNode->next = NULL;
+        newNode->prev = NULL;
+
         Node *curr = list->head;
         int cnt;
         // se l'utente ha inserito un numero più grande rispetto alla dimensione della lista
@@ -44,13 +47,14 @@ bool insert_at(LinkedList *list, void *data, int index, size_t data_size)
             ;
         // se l'utente vuole inserire l'elemento in posizione zero
         if (curr == list->head)
-            res = add_in_front(list, data, data_size);
+            res = add_first(list, data, data_size);
         // se invece vuole inserirlo alla fine
         else if (curr->next == NULL)
             res = add(list, data, data_size);
         // infine se vuole inserirlo in una posizione intermedia
         else
         {
+            newNode->prev = curr;
             newNode->next = curr->next;
             curr->next = newNode;
             res = true;
@@ -62,7 +66,7 @@ bool insert_at(LinkedList *list, void *data, int index, size_t data_size)
     return res;
 }
 
-bool add_in_front(LinkedList *list, void *data, size_t data_size)
+bool add_first(LinkedList *list, void *data, size_t data_size)
 {
     bool res = false;
     if (list != NULL && data != NULL && list->data_size == data_size)
@@ -71,14 +75,23 @@ bool add_in_front(LinkedList *list, void *data, size_t data_size)
             data = *(char **)data;
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
+        newNode->next = NULL;
+        newNode->prev = NULL;
         memcpy(newNode->data, data, list->data_size);
         // controllo se la testa esiste, quindi se la lista ha già un elemento
         // se ha già una testa allora il newNode deve diventare la testa quindi
         // faccio puntare al suo ->next la testa che sarebbe ora il primo elemento
         // così che la testa diventi il secondo elemento
-        (list->head == NULL) ? (newNode->next = NULL) : (newNode->next = list->head);
-        // aggiorno in ogni caso la testa
-        list->head = newNode;
+        if (list->head == NULL)
+        {
+            list->head = newNode;
+            list->last = list->head;
+        }
+        else
+        {
+            newNode->next = list->head;
+            list->head = newNode;
+        }
         res = true;
         list->size++;
     }
@@ -98,15 +111,18 @@ bool add(LinkedList *list, void *data, size_t data_size)
         newNode->data = malloc(list->data_size);
         memcpy(newNode->data, data, list->data_size);
         newNode->next = NULL;
+        newNode->prev = NULL;
 
         if (list->head == NULL)
+        {
             list->head = newNode;
+            list->last = list->head;
+        }
         else
         {
-            Node *curr = list->head;
-            while (curr->next != NULL)
-                curr = curr->next;
-            curr->next = newNode;
+            newNode->prev = list->last;    // assgno al prec del nuovo nodo l'ultimo della lista
+            list->last->next = newNode;    // assegno al successivo dell'ultimo, il nuovo nodo
+            list->last = lsit->last->next; // faccio diventare il nuovo nodo l'ultimo della lista
         }
         res = true;
         list->size++;
@@ -116,28 +132,24 @@ bool add(LinkedList *list, void *data, size_t data_size)
     return res;
 }
 
+// ricontrollare meglio
 bool remove_last(LinkedList *list)
 {
     bool res = false;
     if (list != NULL && list->head != NULL)
     {
-        Node *curr = list->head;
-        // controllo prima che la lista abbia almeno 2 elementi
-        // quindi se curr->next esiste
-        if (curr->next != NULL)
-            // mi serve controllare se il successivo, al successivo di quello corrente sia nullo
-            // perché se voglio eliminare l'ultimo devo avere accesso al penultimo nodo
-            // per fare curr->next = NULL;
-            while (curr->next->next != NULL)
-                curr = curr->next;
+        Node *last = list->last;
         // se la lista ha solo un elemento, quindi esiste soltanto la testa
-        if (curr == list->head)
+        if (list->last == list->head)
             res = remove_head(list);
         else
         {
-            free(curr->next->data);
-            free(curr->next);
-            curr->next = NULL;
+            list->last = list->last->prev;
+            list->last->next = NULL;
+            free(last->data);
+            free(last->next);
+            free(last->prev);
+            free(last);
             res = true;
         }
         (res && list->size > 0) ? (list->size--) : 0;
@@ -215,7 +227,7 @@ bool remove_at(LinkedList *list, int index)
     return res;
 }
 
-bool free_list(LinkedList *list)
+bool clear(LinkedList *list)
 {
     bool res = false;
     if (list != NULL && list->head != NULL)
@@ -306,27 +318,7 @@ void print_list(LinkedList *list)
         printf("Error: the list is empty\n");
 }
 
-void *get_first(LinkedList *list)
-{
-    
-    switch (list->data_type)
-    {
-    case INT:
-        break;
-    case FLOAT:
-        break;
-    case DOUBLE:
-        break;
-    case CHAR:
-        break;
-    case STRING:
-        break;
-    default:
-        break;
-    }
-}
-
-void *get_last(LinkedList *list)
+void *get(LinkedList *list, int index)
 {
 }
 
