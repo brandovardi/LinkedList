@@ -5,8 +5,8 @@
 #include <stdbool.h>
 #include <string.h>
 
-#ifndef _DOUBLELINKEDLIST_H_
-#define _DOUBLELINKEDLIST_H_
+#ifndef _LINKEDLIST_H_
+#define _LINKEDLIST_H_
 
 typedef enum
 {
@@ -84,5 +84,8 @@ int size_of(LinkedList *);
 
 #define PrintList(list) \
     print_list(list)
+
+#define SizeOf(list) \
+    size_of(list)
 
 #endif

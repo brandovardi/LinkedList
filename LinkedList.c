@@ -1,4 +1,4 @@
-#include "DoubleLinkedList.h"
+#include "LinkedList.h"
 
 LinkedList *newLinkedList(DataType data_type)
 {
