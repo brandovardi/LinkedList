@@ -26,31 +26,31 @@ LinkedList *newLinkedList(DataType data_type)
     return this;
 }
 
-bool insert_at(LinkedList *list, void *data, int index, size_t data_size)
+bool insert_at(LinkedList *this, void *data, int index, size_t data_size)
 {
     bool res = false;
-    if (list != NULL && data != NULL && list->data_size == data_size && index >= 0)
+    if (this != NULL && data != NULL && this->data_size == data_size && index >= 0)
     {
-        if (list->data_type == STRING)
+        if (this->data_type == STRING)
             data = *(char **)data;
         Node *newNode = (Node *)malloc(sizeof(Node));
-        newNode->data = malloc(list->data_size);
-        memcpy(newNode->data, data, list->data_size);
+        newNode->data = malloc(this->data_size);
+        memcpy(newNode->data, data, this->data_size);
         newNode->next = NULL;
         newNode->prev = NULL;
 
-        Node *curr = list->head;
+        Node *curr = this->head;
         int cnt;
         // se l'utente ha inserito un numero più grande rispetto alla dimensione della lista
         // non mi interessa e glielo faccio inserire alla fine, dopo l'ultimo
         for (cnt = 0; (cnt < index) && (curr->next != NULL); curr = curr->next, cnt++)
             ;
         // se l'utente vuole inserire l'elemento in posizione zero
-        if (curr == list->head)
-            res = add_first(list, data, data_size);
+        if (curr == this->head)
+            res = add_first(this, data, data_size);
         // se invece vuole inserirlo alla fine
         else if (curr->next == NULL)
-            res = add(list, data, data_size);
+            res = add(this, data, data_size);
         // infine se vuole inserirlo in una posizione intermedia
         else
         {
@@ -61,205 +61,218 @@ bool insert_at(LinkedList *list, void *data, int index, size_t data_size)
         }
         (!res) ?: (list->size++);
     }
-    else if (list == NULL || data == NULL || list->data_size != data_size || index < 0)
+    else if (this == NULL || data == NULL || this->data_size != data_size || index < 0)
         printf("Error: empty list or invalid data or invalid index.\n");
     return res;
 }
 
-bool add_first(LinkedList *list, void *data, size_t data_size)
+bool add_first(LinkedList *this, void *data, size_t data_size)
 {
     bool res = false;
-    if (list != NULL && data != NULL && list->data_size == data_size)
+    if (this != NULL && data != NULL && this->data_size == data_size)
     {
-        if (list->data_type == STRING)
+        if (this->data_type == STRING)
             data = *(char **)data;
         Node *newNode = (Node *)malloc(sizeof(Node));
-        newNode->data = malloc(list->data_size);
+        newNode->data = malloc(this->data_size);
         newNode->next = NULL;
         newNode->prev = NULL;
-        memcpy(newNode->data, data, list->data_size);
+        memcpy(newNode->data, data, this->data_size);
         // controllo se la testa esiste, quindi se la lista ha già un elemento
         // se ha già una testa allora il newNode deve diventare la testa quindi
         // faccio puntare al suo ->next la testa che sarebbe ora il primo elemento
         // così che la testa diventi il secondo elemento
-        if (list->head == NULL)
+        if (this->head == NULL)
         {
-            list->head = newNode;
-            list->last = list->head;
+            this->head = newNode;
+            this->last = this->head;
         }
         else
         {
-            newNode->next = list->head;
-            list->head = newNode;
+            newNode->next = this->head;
+            this->head = newNode;
         }
         res = true;
-        list->size++;
+        this->size++;
     }
     else
         printf("Error: empty list or invalid data.\n");
     return res;
 }
 
-bool add(LinkedList *list, void *data, size_t data_size)
+bool add(LinkedList *this, void *data, size_t data_size)
 {
     bool res = false;
-    if (list != NULL && data != NULL && list->data_size == data_size)
+    if (this != NULL && data != NULL && this->data_size == data_size)
     {
-        if (list->data_type == STRING)
+        if (this->data_type == STRING)
             data = *(char **)data;
         Node *newNode = (Node *)malloc(sizeof(Node));
-        newNode->data = malloc(list->data_size);
-        memcpy(newNode->data, data, list->data_size);
+        newNode->data = malloc(this->data_size);
+        memcpy(newNode->data, data, this->data_size);
         newNode->next = NULL;
         newNode->prev = NULL;
 
-        if (list->head == NULL)
+        if (this->head == NULL)
         {
-            list->head = newNode;
-            list->last = list->head;
+            this->head = newNode;
+            this->last = this->head;
         }
         else
         {
-            newNode->prev = list->last;    // assgno al prec del nuovo nodo l'ultimo della lista
-            list->last->next = newNode;    // assegno al successivo dell'ultimo, il nuovo nodo
-            list->last = lsit->last->next; // faccio diventare il nuovo nodo l'ultimo della lista
+            newNode->prev = this->last;    // assgno al prec del nuovo nodo l'ultimo della lista
+            this->last->next = newNode;    // assegno al successivo dell'ultimo, il nuovo nodo
+            this->last = lsit->last->next; // faccio diventare il nuovo nodo l'ultimo della lista
         }
         res = true;
-        list->size++;
+        this->size++;
     }
     else
         printf("Error: empty list or invalid data.\n");
     return res;
 }
 
-// ricontrollare meglio
-bool remove_last(LinkedList *list)
+bool remove_last(LinkedList *this)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL)
+    if (this != NULL && this->head != NULL)
     {
-        Node *last = list->last;
+        Node *last = this->last;
         // se la lista ha solo un elemento, quindi esiste soltanto la testa
-        if (list->last == list->head)
-            res = remove_head(list);
+        if (this->last == this->head)
+            res = remove_head(this);
         else
         {
-            list->last = list->last->prev;
-            list->last->next = NULL;
+            this->last = this->last->prev;
+            free(this->last->next);
+            this->last->next = NULL;
             free(last->data);
-            free(last->next);
+            last->data = NULL;
             free(last->prev);
+            last->prev = NULL;
             free(last);
+            last = NULL;
             res = true;
         }
-        (res && list->size > 0) ? (list->size--) : 0;
+        (res && this->size > 0) ? (this->size--) : 0;
     }
-    else if (list != NULL || list->head == NULL)
+    else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
     return res;
 }
 
-bool remove_head(LinkedList *list)
+bool remove_head(LinkedList *this)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL)
+    if (this != NULL && this->head != NULL)
     {
         // se la lista ha soltanto un elemento, quindi ha soltanto la testa
-        if (list->head->next == NULL)
+        if (this->head->next == NULL)
         {
-            free(list->head->data);
-            free(list->head);
-            list->head = NULL;
+            free(this->head->data);
+            this->head->data = NULL;
+            free(this->head);
+            this->head = NULL;
+            free(this->last);
+            this->last = NULL;
         }
         // se invece ha più di un elemento
         else
         {
             // mi salvo il secondo elemento della lista
-            Node *headNext = list->head->next;
+            Node *headNext = this->head->next;
             // svuoto la testa e la elimino
-            free(list->head->data);
-            free(list->head);
+            free(this->head->data);
+            this->head->data = NULL;
+            free(this->head);
             // assegno alla testa il secondo elemento, che è diventato il primo
-            list->head = headNext;
+            this->head = headNext;
+            free(this->head->prev);
+            this->head->prev = NULL;
         }
         res = true;
-        (list->size > 0) ? (list->size--) : 0;
+        (this->size <= 0) ?: (list->size--);
     }
-    else if (list != NULL || list->head == NULL)
+    else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
     return res;
 }
 
-bool remove_at(LinkedList *list, int index)
+bool remove_at(LinkedList *this, int index)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && index >= 0)
+    if (this != NULL && this->head != NULL && index >= 0)
     {
         // controllo subito se vuole eliminare la testa, quindi se index == 0
         if (!index)
-            res = remove_head(list);
+            res = remove_head(this);
         // e controlo subito anche se vuole eliminare l'ultimo elemento
-        else if (index >= SizeOf(list) - 1)
-            res = remove_last(list);
+        else if (index >= SizeOf(this) - 1)
+            res = remove_last(this);
         // infine se vuole eliminare un elemento nel mezzo
         else
         {
             int cnt;
-            Node *curr = list->head;
-            // controllo che la lista abbia almeno due elemento prima di iniziare il ciclo
-            if (list->head->next != NULL)
-                for (cnt = 0; (curr->next->next != NULL) && (cnt < index - 1); curr = curr->next, cnt++)
-                    ;
+            Node *curr = this->head;
+            for (cnt = 0; (curr->next != NULL) && (cnt < index); curr = curr->next, cnt++)
+                ;
             // inizio a svuotare il dato
-            free(curr->next->data);
-            // mi salvo l'elemento da eliminare
-            Node *del = curr->next;
+            free(curr->data);
             // modifico la lista eliminando l'elemento desiderato
-            curr->next = curr->next->next;
+            curr->next->prev = curr->prev;
+            curr->prev->next = curr->next;
+            curr->next = NULL;
+            curr->prev = NULL;
             // infine libero la memoria dell'elemento eliminato
-            free(del);
+            free(curr);
+            curr = NULL;
             res = true;
         }
-        (res && list->size > 0) ? (list->size--) : 0;
+        (res && this->size > 0) ? (this->size--) : 0;
     }
-    else if (list != NULL || list->head == NULL || index < 0)
+    else if (this != NULL || this->head == NULL || index < 0)
         printf("Error: empty list or invalid index.\n");
     return res;
 }
 
-bool clear(LinkedList *list)
+bool clear(LinkedList *this)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL)
+    if (this != NULL && this->head != NULL)
     {
-        Node *curr = list->head;
+        Node *curr = this->head;
         while (curr->next != NULL)
         {
             Node *next = curr->next;
             free(curr->data);
+            curr->data = NULL;
             free(curr);
+            curr = NULL;
+            curr->prev = NULL;
             curr = next;
         }
-        free(list);
+        free(this);
+        this->head = NULL;
+        this->last = NULL;
         res = true;
-        list->size = 0;
+        this->size = 0;
     }
-    else if (list != NULL || list->head == NULL)
+    else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
     return res;
 }
 
-bool replace_head(LinkedList *list, void *data, size_t data_size)
+bool replace_head(LinkedList *this, void *data, size_t data_size)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && list->data_size == data_size)
+    if (this != NULL && this->head != NULL && this->data_size == data_size)
     {
-        if (list->data_type == STRING)
+        if (this->data_type == STRING)
             data = *(char **)data;
-        free(list->head->data);
-        list->head->data = NULL;
-        list->head->data = malloc(list->data_size);
-        memcpy(list->head->data, data, list->data_size);
+        free(this->head->data);
+        this->head->data = NULL;
+        this->head->data = malloc(this->data_size);
+        memcpy(this->head->data, data, this->data_size);
         res = true;
     }
     else
@@ -267,20 +280,20 @@ bool replace_head(LinkedList *list, void *data, size_t data_size)
     return res;
 }
 
-bool replace_at(LinkedList *list, void *data, int index, size_t data_size)
+bool replace_at(LinkedList *this, void *data, int index, size_t data_size)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && index >= 0 && list->data_size == data_size)
+    if (this != NULL && this->head != NULL && index >= 0 && this->data_size == data_size)
     {
-        if (list->data_type == STRING)
+        if (this->data_type == STRING)
             data = *(char **)data;
         if (!index)
-            res = replace_head(list, data, data_size);
+            res = replace_head(this, data, data_size);
         else
         {
             int i;
             Node *curr;
-            for (curr = list->head, i = 0; (i < index) && (curr->next != NULL); curr = curr->next, i++)
+            for (curr = this->head, i = 0; (i < index) && (curr->next != NULL); curr = curr->next, i++)
                 ;
             free(curr->data);
             curr->data = NULL;
@@ -294,37 +307,37 @@ bool replace_at(LinkedList *list, void *data, int index, size_t data_size)
     return res;
 }
 
-void print_list(LinkedList *list)
+void print_list(LinkedList *this)
 {
-    if (list != NULL && list->head != NULL)
+    if (this != NULL && this->head != NULL)
     {
-        Node *curr = list->head;
+        Node *curr = this->head;
         while (curr != NULL)
         {
-            if (list->data_type == INT)
+            if (this->data_type == INT)
                 printf("%d\n", *(int *)curr->data);
-            else if (list->data_type == FLOAT)
+            else if (this->data_type == FLOAT)
                 printf("%f\n", *(float *)curr->data);
-            else if (list->data_type == DOUBLE)
+            else if (this->data_type == DOUBLE)
                 printf("%lf\n", *(double *)curr->data);
-            else if (list->data_type == STRING)
+            else if (this->data_type == STRING)
                 printf("%s\n", (char *)curr->data);
-            else if (list->data_type == CHAR)
+            else if (this->data_type == CHAR)
                 printf("%c\n", *(char *)curr->data);
             curr = curr->next;
         }
     }
-    else if (list != NULL || list->head == NULL)
+    else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
 }
 
-void *get(LinkedList *list, int index)
+void *get(LinkedList *this, int index)
 {
 }
 
-int size_of(LinkedList *list)
+int size_of(LinkedList *this)
 {
     int size = 0;
-    (list != NULL && list->head != NULL) ? (size = list->size) : printf("Error: the list is empty.\n");
+    (this != NULL && this->head != NULL) ? (size = this->size) : printf("Error: the list is empty.\n");
     return size;
 }
