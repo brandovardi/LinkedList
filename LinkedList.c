@@ -59,7 +59,7 @@ bool insert_at(LinkedList *this, void *data, int index, size_t data_size)
             curr->next = newNode;
             res = true;
         }
-        (!res) ?: (list->size++);
+        (!res) ?: (this->size++);
     }
     else if (this == NULL || data == NULL || this->data_size != data_size || index < 0)
         printf("Error: empty list or invalid data or invalid index.\n");
@@ -122,7 +122,7 @@ bool add(LinkedList *this, void *data, size_t data_size)
         {
             newNode->prev = this->last;    // assgno al prec del nuovo nodo l'ultimo della lista
             this->last->next = newNode;    // assegno al successivo dell'ultimo, il nuovo nodo
-            this->last = lsit->last->next; // faccio diventare il nuovo nodo l'ultimo della lista
+            this->last = this->last->next; // faccio diventare il nuovo nodo l'ultimo della lista
         }
         res = true;
         this->size++;
@@ -191,7 +191,7 @@ bool remove_head(LinkedList *this)
             this->head->prev = NULL;
         }
         res = true;
-        (this->size <= 0) ?: (list->size--);
+        (this->size <= 0) ?: (this->size--);
     }
     else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
@@ -329,10 +329,6 @@ void print_list(LinkedList *this)
     }
     else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
-}
-
-void *get(LinkedList *this, int index)
-{
 }
 
 int size_of(LinkedList *this)

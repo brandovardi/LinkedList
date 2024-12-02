@@ -45,53 +45,61 @@ bool remove_at(LinkedList *, int);
 bool replace_head(LinkedList *, void *, size_t);
 bool replace_at(LinkedList *, void *, int, size_t);
 void print_list(LinkedList *);
-void get(LinkedList *, int);
 int size_of(LinkedList *);
 
-#define InsertAt(list, data, index) \
-    insert_at(list, &data, index, sizeof(data))
+#define InsertAt(this, data, index) \
+    insert_at(this, &data, index, sizeof(data))
 
-#define AddFirst(list, data) \
-    add_first(list, &data, sizeof(data))
+#define AddFirst(this, data) \
+    add_first(this, &data, sizeof(data))
 
-#define Add(list, data) \
-    add(list, &data, sizeof(data))
+#define Add(this, data) \
+    add(this, &data, sizeof(data))
 
-#define Clear(list) \
-    clear(list)
+#define Clear(this) \
+    clear(this)
 
-#define RemoveLast(list) \
-    remove_last(list)
+#define RemoveLast(this) \
+    remove_last(this)
 
-#define RemoveHead(list) \
-    remove_head(list)
+#define RemoveHead(this) \
+    remove_head(this)
 
-#define RemoveAt(list, index) \
-    remove_at(list, index)
+#define RemoveAt(this, index) \
+    remove_at(this, index)
 
-#define ReplaceHead(list, data, index) \
-    replace_head(list, &data, sizeof(data))
+#define ReplaceHead(this, data, index) \
+    replace_head(this, &data, sizeof(data))
 
-#define ReplaceAt(list, data, index) \
-    replace_at(list, &data, index, sizeof(data))
+#define ReplaceAt(this, data, index) \
+    replace_at(this, &data, index, sizeof(data))
 
-#define GetHead(list) ( \
-    ((list) == NULL || (list)->head == NULL) ? NULL : (*(typeof((list)->head->data))((list)->head->data)))
+#define GetHead(this) ( \
+    ((this) == NULL || (this)->head == NULL) ? NULL : (*(typeof((this)->head->data))((this)->head->data)))
 
 // non creo la funzione get_head(...) perché avendo un tipo generico per i valori della lista
 // dovrei ritornare un puntatore void (castato poi al tipo di data_type della lista)
 // quindi voglio evitare che un poi io mi debba gestire i puntatori dal main
 // così facendo invece vado a prendere direttamente il valore contenuto
-#define GetLast(list) ( \
-    ((list) == NULL || (list)->last == NULL) ? NULL : (*(typeof((list)->last->data))((list)->last->data)))
+#define GetLast(this) ( \
+    ((this) == NULL || (this)->last == NULL) ? NULL : (*(typeof((this)->last->data))((this)->last->data)))
 
-#define Get(list, index) \
-        get(list, index)
+#define Get(this, index) (                                                   \
+    ((this) == NULL || (index) < 0) ? NULL : ({                              \
+        typeof((this)->head) node = (this)->head;                            \
+        int i = 0;                                                           \
+        while (node != NULL && i < (index))                                  \
+        {                                                                    \
+            node = node->next;                                               \
+            i++;                                                             \
+        }                                                                    \
+        (node == NULL) ? NULL : (*(typeof((this)->head->data))(node->data)); \
+    }))
 
-#define PrintList(list) \
-        print_list(list)
+#define PrintList(this) \
+    print_list(this)
 
-#define SizeOf(list) \
-        size_of(list)
+#define SizeOf(this) \
+    size_of(this)
 
 #endif
