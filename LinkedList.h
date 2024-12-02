@@ -32,9 +32,10 @@ bool free_list(LinkedList*);
 bool remove_last(LinkedList*);
 bool remove_head(LinkedList*);
 bool remove_at(LinkedList*, int);
+bool replace_head(LinkedList*, void*,size_t);
 bool replace_at(LinkedList*, void*,int,size_t);
-int size_of(LinkedList*);
 void print_list(LinkedList*);
+int size_of(LinkedList*);
 
 #define AddAtIndex(list, data, index) \
     add_at_index(list, &data, index, sizeof(data))
@@ -50,11 +51,13 @@ void print_list(LinkedList*);
     remove_head(list)
 #define RemoveAt(list, index) \
     remove_at(list, index)
+#define ReplaceHead(list, data, index) \
+    replace_head(list, &data, sizeof(data))
 #define ReplaceAt(list, data, index) \
     replace_at(list, &data, index, sizeof(data))
-#define SizeOf(list) \
-    size_of(list)
 #define PrintList(list) \
     print_list(list)
+#define SizeOf(list) \
+    size_of(list)
 
 #endif
