@@ -142,9 +142,11 @@ char *tolower_str(char *);
     void *: "void *",                             \
     default: "unknown")
 
+// definisco una sizeof che accetta come parametro una stringa del tipo da verificare (es. "char")
 #define SizeOf(T) \
     size_of(T)
 
+// definisco ToLower() per le stringhe quella già esistente funziona solamente per i singoli caratteri
 #define ToLower(s) \
     tolower_str(s)
 

@@ -299,7 +299,6 @@ bool replace_at(LinkedList *this, void *data, int index, size_t data_size)
     return res;
 }
 
-// rocontrollare
 void print_list(LinkedList *this)
 {
     if (this != NULL && this->head != NULL)
