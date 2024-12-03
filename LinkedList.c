@@ -336,43 +336,43 @@ size_t size_of(char *T)
 {
     size_t res = -1;
 
-    if (T == "char")
+    if (strcmp(T, "char"))
         res = sizeof(char);
-    else if (T == "signed char")
+    else if (strcmp(T, "signed char"))
         res = sizeof(signed char);
-    else if (T == "unsigned char")
+    else if (strcmp(T, "unsigned char"))
         res = sizeof(unsigned char);
-    else if (T == "short")
+    else if (strcmp(T, "short"))
         res = sizeof(short);
-    else if (T == "unsigned short")
+    else if (strcmp(T, "unsigned short"))
         res = sizeof(unsigned short);
-    else if (T == "int")
+    else if (strcmp(T, "int"))
         res = sizeof(int);
-    else if (T == "unsigned int")
+    else if (strcmp(T, "unsigned int"))
         res = sizeof(unsigned int);
-    else if (T == "long")
+    else if (strcmp(T, "long"))
         res = sizeof(long);
-    else if (T == "unsigned long")
+    else if (strcmp(T, "unsigned long"))
         res = sizeof(unsigned long);
-    else if (T == "long long")
+    else if (strcmp(T, "long long"))
         res = sizeof(long long);
-    else if (T == "unsigned long long")
+    else if (strcmp(T, "unsigned long long"))
         res = sizeof(unsigned long long);
-    else if (T == "float")
+    else if (strcmp(T, "float"))
         res = sizeof(float);
-    else if (T == "double")
+    else if (strcmp(T, "double"))
         res = sizeof(double);
-    else if (T == "long double")
+    else if (strcmp(T, "long double"))
         res = sizeof(long double);
-    else if (T == "string")
+    else if (strcmp(T, "string"))
         res = sizeof(char *);
-    else if (T == "LinkedList")
+    else if (strcmp(T, "LinkedList"))
         res = sizeof(LinkedList);
-    else if (T == "LinkedList *")
+    else if (strcmp(T, "LinkedList *"))
         res = sizeof(LinkedList *);
-    else if (T == "Node")
+    else if (strcmp(T, "Node"))
         res = sizeof(Node);
-    else if (T == "Node *")
+    else if (strcmp(T, "Node *"))
         res = sizeof(Node *);
     else
         printf("Error: unknown type.\n");
@@ -380,15 +380,16 @@ size_t size_of(char *T)
     return res;
 }
 
-char *tolower_str(const char *str)
+char *tolower_str(char *str)
 {
     int l = strlen(str) + 1;
 
     // Allocazione dinamica della memoria per la nuova stringa (più 1 per '\0')
-    char *lower_str = malloc(l * SizeOf("char"));
+    char *lower_str = malloc(l * sizeof(char));
+    
     if (lower_str == NULL)
     {
-        perror("malloc failed.\n");
+        printf("malloc failed.\n");
         lower_str = NULL;
     }
     else

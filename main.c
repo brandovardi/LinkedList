@@ -1,11 +1,17 @@
 #include "LinkedList.h"
 
-int main(int argc, char** argv)
+int main()
 {
-    LinkedList* list = newLinkedList("int");
-    char* c = "CIAO\0";
+    LinkedList* list = newLinkedList("INT");
+    int x = 2, t = 2;
+
+    Add(list, 3);
+    PrintList(list);
+
+    char* c = "CIAO";
     printf("%s\n", c);
-    c = ToLower(c);
+    printf("\n\nprima di tolower\n");
+    // c = ToLower(c);
     printf("%s\n", c);
     
     free(list);

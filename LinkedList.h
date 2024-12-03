@@ -25,7 +25,6 @@ typedef struct LinkedList
     char *data_type;
 } LinkedList;
 
-// """costruttore"""
 LinkedList *newLinkedList(char *data_type);
 
 bool insert_at(LinkedList *, void *, int, size_t);
@@ -40,16 +39,19 @@ bool replace_at(LinkedList *, void *, int, size_t);
 void print_list(LinkedList *);
 int size(LinkedList *);
 size_t size_of(char *);
-char *tolower_str(const char*);
+char *tolower_str(char *);
 
 #define InsertAt(this, data, index) \
-    insert_at(this, &data, index, sizeof(data))
+    __typeof__(data) _tmp = (data); \
+    insert_at(this, &_tmp, index, sizeof(data))
 
-#define AddFirst(this, data) \
-    add_first(this, &data, sizeof(data))
+#define AddFirst(this, data)        \
+    __typeof__(data) _tmp = (data); \
+    add_first(this, &_tmp, sizeof(data))
 
-#define Add(this, data) \
-    add(this, &data, sizeof(data))
+#define Add(this, data)             \
+    __typeof__(data) _tmp = (data); \
+    add(this, &_tmp, sizeof(data))
 
 #define Clear(this) \
     clear(this)
@@ -123,7 +125,7 @@ char *tolower_str(const char*);
 #define SizeOf(T) \
     size_of(T)
 
-#define ToLower(s)\
+#define ToLower(s) \
     tolower_str(s)
 
 #endif
