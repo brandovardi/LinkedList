@@ -1,27 +1,19 @@
 #include "LinkedList.h"
 
-LinkedList *newLinkedList(DataType data_type)
+LinkedList *newLinkedList(char *data_type)
 {
     LinkedList *this = NULL;
-    if (data_type == INT || data_type == FLOAT || data_type == DOUBLE || data_type == CHAR || data_type == STRING)
+    // data_type = tolower(data_type);clear
+    if (TypeOf(data_type) != NULL && TypeOf(data_type) != "unknown")
     {
         this = (LinkedList *)malloc(sizeof(LinkedList));
         this->head = NULL;
         this->last = NULL;
         this->size = 0;
         this->data_type = data_type;
-        if (data_type == INT)
-            this->data_size = sizeof(int);
-        else if (data_type == FLOAT)
-            this->data_size = sizeof(float);
-        else if (data_type == DOUBLE)
-            this->data_size = sizeof(double);
-        else if (data_type == CHAR)
-            this->data_size = sizeof(char);
-        else if (data_type == STRING)
-            this->data_size = sizeof(char *);
+        this->data_size = SizeOf(data_type);
     }
-    else if (data_type != INT && data_type != FLOAT && data_type != DOUBLE && data_type != CHAR && data_type != STRING)
+    else
         printf("Error: data_type is not valid\n");
     return this;
 }
@@ -207,7 +199,7 @@ bool remove_at(LinkedList *this, int index)
         if (!index)
             res = remove_head(this);
         // e controlo subito anche se vuole eliminare l'ultimo elemento
-        else if (index >= SizeOf(this) - 1)
+        else if (index >= Size(this) - 1)
             res = remove_last(this);
         // infine se vuole eliminare un elemento nel mezzo
         else
@@ -285,7 +277,7 @@ bool replace_at(LinkedList *this, void *data, int index, size_t data_size)
     bool res = false;
     if (this != NULL && this->head != NULL && index >= 0 && this->data_size == data_size)
     {
-        if (this->data_type == STRING)
+        if (TypeOf(this->head) == "string")
             data = *(char **)data;
         if (!index)
             res = replace_head(this, data, data_size);
@@ -311,29 +303,97 @@ void print_list(LinkedList *this)
 {
     if (this != NULL && this->head != NULL)
     {
-        Node *curr = this->head;
-        while (curr != NULL)
-        {
-            if (this->data_type == INT)
-                printf("%d\n", *(int *)curr->data);
-            else if (this->data_type == FLOAT)
-                printf("%f\n", *(float *)curr->data);
-            else if (this->data_type == DOUBLE)
-                printf("%lf\n", *(double *)curr->data);
-            else if (this->data_type == STRING)
-                printf("%s\n", (char *)curr->data);
-            else if (this->data_type == CHAR)
-                printf("%c\n", *(char *)curr->data);
-            curr = curr->next;
-        }
+        // Node *curr = this->head;
+        // while (curr != NULL)
+        // {
+        //     if (this->data_type == INT)
+        //         printf("%d\n", *(int *)curr->data);
+        //     else if (this->data_type == FLOAT)
+        //         printf("%f\n", *(float *)curr->data);
+        //     else if (this->data_type == DOUBLE)
+        //         printf("%lf\n", *(double *)curr->data);
+        //     else if (this->data_type == STRING)
+        //         printf("%s\n", *(char **)curr->data);
+        //     else if (this->data_type == CHAR)
+        //         printf("%c\n", *(char *)curr->data);
+        //     curr = curr->next;
+        // }
     }
     else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
 }
 
-int size_of(LinkedList *this)
+int size(LinkedList *this)
 {
     int size = 0;
     (this != NULL && this->head != NULL) ? (size = this->size) : printf("Error: the list is empty.\n");
     return size;
+}
+
+size_t size_of(char *T)
+{
+    size_t res = -1;
+
+    if (T == "char")
+        res = sizeof(char);
+    else if (T == "signed char")
+        res = sizeof(signed char);
+    else if (T == "unsigned char")
+        res = sizeof(unsigned char);
+    else if (T == "short")
+        res = sizeof(short);
+    else if (T == "unsigned short")
+        res = sizeof(unsigned short);
+    else if (T == "int")
+        res = sizeof(int);
+    else if (T == "unsigned int")
+        res = sizeof(unsigned int);
+    else if (T == "long")
+        res = sizeof(long);
+    else if (T == "unsigned long")
+        res = sizeof(unsigned long);
+    else if (T == "long long")
+        res = sizeof(long long);
+    else if (T == "unsigned long long")
+        res = sizeof(unsigned long long);
+    else if (T == "float")
+        res = sizeof(float);
+    else if (T == "double")
+        res = sizeof(double);
+    else if (T == "long double")
+        res = sizeof(long double);
+    else if (T == "char *")
+        res = sizeof(char *);
+    else if (T == "LinkedList")
+        res = sizeof(LinkedList);
+    else if (T == "LinkedList *")
+        res = sizeof(LinkedList *);
+    else if (T == "Node")
+        res = sizeof(Node);
+    else if (T == "Node *")
+        res = sizeof(Node *);
+    else
+        printf("Error: unknown type.\n");
+
+    return res;
+}
+
+char *tolower_str(const char *str)
+{
+    int l = strlen(str) + 1;
+
+    // Allocazione dinamica della memoria per la nuova stringa (più 1 per '\0')
+    char *lower_str = malloc(l * sizeof(char));
+    if (lower_str == NULL)
+    {
+        perror("malloc failed.\n");
+        lower_str = NULL;
+    }
+    else
+    {
+        for (int i = 0; i < l; i++)
+            *(lower_str + i) = tolower((unsigned char)*(str + i));
+        *(lower_str + l) = '\0';
+    }
+    return lower_str;
 }

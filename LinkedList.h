@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 #ifndef _LINKEDLIST_H_
 #define _LINKEDLIST_H_
@@ -30,10 +31,10 @@ typedef struct LinkedList
     struct Node *last;
     size_t size;
     size_t data_size; // Dimensione di ogni elemento
-    DataType data_type;
+    char *data_type;
 } LinkedList;
 
-LinkedList *newLinkedList(DataType data_type);
+LinkedList *newLinkedList(char *data_type);
 
 bool insert_at(LinkedList *, void *, int, size_t);
 bool add_first(LinkedList *, void *, size_t);
@@ -45,7 +46,8 @@ bool remove_at(LinkedList *, int);
 bool replace_head(LinkedList *, void *, size_t);
 bool replace_at(LinkedList *, void *, int, size_t);
 void print_list(LinkedList *);
-int size_of(LinkedList *);
+int size(LinkedList *);
+size_t size_of(char *);
 
 #define InsertAt(this, data, index) \
     insert_at(this, &data, index, sizeof(data))
@@ -84,11 +86,12 @@ int size_of(LinkedList *);
 #define GetLast(this) ( \
     ((this) == NULL || (this)->last == NULL) ? NULL : (*(typeof((this)->last->data))((this)->last->data)))
 
+// anche qua scrivo un if ternario e ciclo tutta la lista finche non trovo
 #define Get(this, index) (                                                   \
     ((this) == NULL || (index) < 0) ? NULL : ({                              \
         typeof((this)->head) node = (this)->head;                            \
         int i = 0;                                                           \
-        while (node != NULL && i < (index))                                  \
+        while (node->next != NULL && i < (index))                            \
         {                                                                    \
             node = node->next;                                               \
             i++;                                                             \
@@ -99,7 +102,34 @@ int size_of(LinkedList *);
 #define PrintList(this) \
     print_list(this)
 
-#define SizeOf(this) \
-    size_of(this)
+#define Size(this) \
+    size(this)
+
+#define TypeOf(T) _Generic((T),               \
+    char: "char",                             \
+    signed char: "signed char",               \
+    unsigned char: "unsigned char",           \
+    short: "short",                           \
+    unsigned short: "unsigned short",         \
+    int: "int",                               \
+    unsigned int: "unsigned int",             \
+    long: "long",                             \
+    unsigned long: "unsigned long",           \
+    long long: "long long",                   \
+    unsigned long long: "unsigned long long", \
+    float: "float",                           \
+    double: "double",                         \
+    long double: "long double",               \
+    char *: "char *",                         \
+    LinkedList: "LinkedList",                 \
+    LinkedList *: "LinkedList *",             \
+    Node: "Node",                             \
+    Node *: "Node *",                         \
+    default: "unknown")
+
+#define SizeOf(T) \
+    size_of(T)
+
+char *tolower_str(const char *);
 
 #endif
