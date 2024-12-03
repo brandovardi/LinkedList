@@ -9,15 +9,6 @@
 #ifndef _LINKEDLIST_H_
 #define _LINKEDLIST_H_
 
-typedef enum
-{
-    INT,
-    FLOAT,
-    DOUBLE,
-    CHAR,
-    STRING
-} DataType;
-
 typedef struct Node
 {
     struct Node *prev;
@@ -34,6 +25,7 @@ typedef struct LinkedList
     char *data_type;
 } LinkedList;
 
+// """costruttore"""
 LinkedList *newLinkedList(char *data_type);
 
 bool insert_at(LinkedList *, void *, int, size_t);
@@ -48,6 +40,7 @@ bool replace_at(LinkedList *, void *, int, size_t);
 void print_list(LinkedList *);
 int size(LinkedList *);
 size_t size_of(char *);
+char *tolower_str(const char*);
 
 #define InsertAt(this, data, index) \
     insert_at(this, &data, index, sizeof(data))
@@ -120,7 +113,7 @@ size_t size_of(char *);
     float: "float",                           \
     double: "double",                         \
     long double: "long double",               \
-    char *: "char *",                         \
+    char *: "string",                         \
     LinkedList: "LinkedList",                 \
     LinkedList *: "LinkedList *",             \
     Node: "Node",                             \
@@ -130,6 +123,7 @@ size_t size_of(char *);
 #define SizeOf(T) \
     size_of(T)
 
-char *tolower_str(const char *);
+#define ToLower(s)\
+    tolower_str(s)
 
 #endif

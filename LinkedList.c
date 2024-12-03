@@ -3,10 +3,10 @@
 LinkedList *newLinkedList(char *data_type)
 {
     LinkedList *this = NULL;
-    // data_type = tolower(data_type);clear
+    data_type = ToLower(data_type);
     if (TypeOf(data_type) != NULL && TypeOf(data_type) != "unknown")
     {
-        this = (LinkedList *)malloc(sizeof(LinkedList));
+        this = (LinkedList *)malloc(SizeOf("LinkedList"));
         this->head = NULL;
         this->last = NULL;
         this->size = 0;
@@ -23,9 +23,9 @@ bool insert_at(LinkedList *this, void *data, int index, size_t data_size)
     bool res = false;
     if (this != NULL && data != NULL && this->data_size == data_size && index >= 0)
     {
-        if (this->data_type == STRING)
+        if (this->data_type == "string")
             data = *(char **)data;
-        Node *newNode = (Node *)malloc(sizeof(Node));
+        Node *newNode = (Node *)malloc(SizeOf("Node"));
         newNode->data = malloc(this->data_size);
         memcpy(newNode->data, data, this->data_size);
         newNode->next = NULL;
@@ -63,9 +63,9 @@ bool add_first(LinkedList *this, void *data, size_t data_size)
     bool res = false;
     if (this != NULL && data != NULL && this->data_size == data_size)
     {
-        if (this->data_type == STRING)
+        if (this->data_type == "string")
             data = *(char **)data;
-        Node *newNode = (Node *)malloc(sizeof(Node));
+        Node *newNode = (Node *)malloc(SizeOf("Node"));
         newNode->data = malloc(this->data_size);
         newNode->next = NULL;
         newNode->prev = NULL;
@@ -97,9 +97,9 @@ bool add(LinkedList *this, void *data, size_t data_size)
     bool res = false;
     if (this != NULL && data != NULL && this->data_size == data_size)
     {
-        if (this->data_type == STRING)
+        if (this->data_type == "string")
             data = *(char **)data;
-        Node *newNode = (Node *)malloc(sizeof(Node));
+        Node *newNode = (Node *)malloc(SizeOf("Node"));
         newNode->data = malloc(this->data_size);
         memcpy(newNode->data, data, this->data_size);
         newNode->next = NULL;
@@ -259,7 +259,7 @@ bool replace_head(LinkedList *this, void *data, size_t data_size)
     bool res = false;
     if (this != NULL && this->head != NULL && this->data_size == data_size)
     {
-        if (this->data_type == STRING)
+        if (this->data_type == "string")
             data = *(char **)data;
         free(this->head->data);
         this->head->data = NULL;
@@ -289,7 +289,7 @@ bool replace_at(LinkedList *this, void *data, int index, size_t data_size)
                 ;
             free(curr->data);
             curr->data = NULL;
-            curr->data = malloc(data_size);
+            curr->data = malloc(this->data_size);
             memcpy(curr->data, data, data_size);
             res = true;
         }
@@ -299,25 +299,27 @@ bool replace_at(LinkedList *this, void *data, int index, size_t data_size)
     return res;
 }
 
+// rocontrollare
 void print_list(LinkedList *this)
 {
     if (this != NULL && this->head != NULL)
     {
-        // Node *curr = this->head;
-        // while (curr != NULL)
-        // {
-        //     if (this->data_type == INT)
-        //         printf("%d\n", *(int *)curr->data);
-        //     else if (this->data_type == FLOAT)
-        //         printf("%f\n", *(float *)curr->data);
-        //     else if (this->data_type == DOUBLE)
-        //         printf("%lf\n", *(double *)curr->data);
-        //     else if (this->data_type == STRING)
-        //         printf("%s\n", *(char **)curr->data);
-        //     else if (this->data_type == CHAR)
-        //         printf("%c\n", *(char *)curr->data);
-        //     curr = curr->next;
-        // }
+        Node *curr = this->head;
+        while (curr != NULL)
+        {
+            printf("%d\n", *(typeof(this->data_type) *)curr->data);
+            // if (this->data_type == "int")
+            //     printf("%d\n", *(int *)curr->data);
+            // else if (this->data_type == "float")
+            //     printf("%f\n", *(float *)curr->data);
+            // else if (this->data_type == "double")
+            //     printf("%lf\n", *(double *)curr->data);
+            // else if (this->data_type == "string")
+            //     printf("%s\n", *(char **)curr->data);
+            // else if (this->data_type == "char")
+            //     printf("%c\n", *(char *)curr->data);
+            curr = curr->next;
+        }
     }
     else if (this != NULL || this->head == NULL)
         printf("Error: the list is empty\n");
@@ -362,7 +364,7 @@ size_t size_of(char *T)
         res = sizeof(double);
     else if (T == "long double")
         res = sizeof(long double);
-    else if (T == "char *")
+    else if (T == "string")
         res = sizeof(char *);
     else if (T == "LinkedList")
         res = sizeof(LinkedList);
@@ -383,7 +385,7 @@ char *tolower_str(const char *str)
     int l = strlen(str) + 1;
 
     // Allocazione dinamica della memoria per la nuova stringa (più 1 per '\0')
-    char *lower_str = malloc(l * sizeof(char));
+    char *lower_str = malloc(l * SizeOf("char"));
     if (lower_str == NULL)
     {
         perror("malloc failed.\n");
