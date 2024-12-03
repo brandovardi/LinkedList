@@ -7,14 +7,8 @@ int main()
 
     Add(list, 3);
     PrintList(list);
-
-    char* c = "CIAO";
-    printf("%s\n", c);
-    printf("\n\nprima di tolower\n");
-    // c = ToLower(c);
-    printf("%s\n", c);
     
     free(list);
-
+    
     return 0;
 }

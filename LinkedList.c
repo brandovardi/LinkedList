@@ -23,7 +23,7 @@ bool insert_at(LinkedList *this, void *data, int index, size_t data_size)
     bool res = false;
     if (this != NULL && data != NULL && this->data_size == data_size && index >= 0)
     {
-        if (this->data_type == "string")
+        if (this->data_type == "char *")
             data = *(char **)data;
         Node *newNode = (Node *)malloc(SizeOf("Node"));
         newNode->data = malloc(this->data_size);
@@ -63,7 +63,7 @@ bool add_first(LinkedList *this, void *data, size_t data_size)
     bool res = false;
     if (this != NULL && data != NULL && this->data_size == data_size)
     {
-        if (this->data_type == "string")
+        if (this->data_type == "char *")
             data = *(char **)data;
         Node *newNode = (Node *)malloc(SizeOf("Node"));
         newNode->data = malloc(this->data_size);
@@ -97,7 +97,7 @@ bool add(LinkedList *this, void *data, size_t data_size)
     bool res = false;
     if (this != NULL && data != NULL && this->data_size == data_size)
     {
-        if (this->data_type == "string")
+        if (this->data_type == "char *")
             data = *(char **)data;
         Node *newNode = (Node *)malloc(SizeOf("Node"));
         newNode->data = malloc(this->data_size);
@@ -259,7 +259,7 @@ bool replace_head(LinkedList *this, void *data, size_t data_size)
     bool res = false;
     if (this != NULL && this->head != NULL && this->data_size == data_size)
     {
-        if (this->data_type == "string")
+        if (this->data_type == "char *")
             data = *(char **)data;
         free(this->head->data);
         this->head->data = NULL;
@@ -277,7 +277,7 @@ bool replace_at(LinkedList *this, void *data, int index, size_t data_size)
     bool res = false;
     if (this != NULL && this->head != NULL && index >= 0 && this->data_size == data_size)
     {
-        if (TypeOf(this->head) == "string")
+        if (TypeOf(this->data_size) == "char *")
             data = *(char **)data;
         if (!index)
             res = replace_head(this, data, data_size);
@@ -308,16 +308,6 @@ void print_list(LinkedList *this)
         while (curr != NULL)
         {
             printf("%d\n", *(typeof(this->data_type) *)curr->data);
-            // if (this->data_type == "int")
-            //     printf("%d\n", *(int *)curr->data);
-            // else if (this->data_type == "float")
-            //     printf("%f\n", *(float *)curr->data);
-            // else if (this->data_type == "double")
-            //     printf("%lf\n", *(double *)curr->data);
-            // else if (this->data_type == "string")
-            //     printf("%s\n", *(char **)curr->data);
-            // else if (this->data_type == "char")
-            //     printf("%c\n", *(char *)curr->data);
             curr = curr->next;
         }
     }
@@ -336,44 +326,76 @@ size_t size_of(char *T)
 {
     size_t res = -1;
 
-    if (strcmp(T, "char"))
+    if (!strcmp(T, "char"))
         res = sizeof(char);
-    else if (strcmp(T, "signed char"))
-        res = sizeof(signed char);
-    else if (strcmp(T, "unsigned char"))
-        res = sizeof(unsigned char);
-    else if (strcmp(T, "short"))
-        res = sizeof(short);
-    else if (strcmp(T, "unsigned short"))
-        res = sizeof(unsigned short);
-    else if (strcmp(T, "int"))
-        res = sizeof(int);
-    else if (strcmp(T, "unsigned int"))
-        res = sizeof(unsigned int);
-    else if (strcmp(T, "long"))
-        res = sizeof(long);
-    else if (strcmp(T, "unsigned long"))
-        res = sizeof(unsigned long);
-    else if (strcmp(T, "long long"))
-        res = sizeof(long long);
-    else if (strcmp(T, "unsigned long long"))
-        res = sizeof(unsigned long long);
-    else if (strcmp(T, "float"))
-        res = sizeof(float);
-    else if (strcmp(T, "double"))
-        res = sizeof(double);
-    else if (strcmp(T, "long double"))
-        res = sizeof(long double);
-    else if (strcmp(T, "string"))
+    else if (!strcmp(T, "char *"))
         res = sizeof(char *);
-    else if (strcmp(T, "LinkedList"))
+    else if (!strcmp(T, "signed char"))
+        res = sizeof(signed char);
+    else if (!strcmp(T, "signed char *"))
+        res = sizeof(signed char *);
+    else if (!strcmp(T, "unsigned char"))
+        res = sizeof(unsigned char);
+    else if (!strcmp(T, "unsigned char *"))
+        res = sizeof(unsigned char *);
+    else if (!strcmp(T, "short"))
+        res = sizeof(short);
+    else if (!strcmp(T, "short *"))
+        res = sizeof(short *);
+    else if (!strcmp(T, "unsigned short"))
+        res = sizeof(unsigned short);
+    else if (!strcmp(T, "unsigned short *"))
+        res = sizeof(unsigned short *);
+    else if (!strcmp(T, "int"))
+        res = sizeof(int);
+    else if (!strcmp(T, "int *"))
+        res = sizeof(int *);
+    else if (!strcmp(T, "unsigned int"))
+        res = sizeof(unsigned int);
+    else if (!strcmp(T, "unsigned int *"))
+        res = sizeof(unsigned int *);
+    else if (!strcmp(T, "long"))
+        res = sizeof(long);
+    else if (!strcmp(T, "long *"))
+        res = sizeof(long *);
+    else if (!strcmp(T, "unsigned long"))
+        res = sizeof(unsigned long);
+    else if (!strcmp(T, "unsigned long *"))
+        res = sizeof(unsigned long *);
+    else if (!strcmp(T, "long long"))
+        res = sizeof(long long);
+    else if (!strcmp(T, "long long *"))
+        res = sizeof(long long *);
+    else if (!strcmp(T, "unsigned long long"))
+        res = sizeof(unsigned long long);
+    else if (!strcmp(T, "unsigned long long *"))
+        res = sizeof(unsigned long long *);
+    else if (!strcmp(T, "float"))
+        res = sizeof(float);
+    else if (!strcmp(T, "float *"))
+        res = sizeof(float *);
+    else if (!strcmp(T, "double"))
+        res = sizeof(double);
+    else if (!strcmp(T, "double *"))
+        res = sizeof(double *);
+    else if (!strcmp(T, "long double"))
+        res = sizeof(long double);
+    else if (!strcmp(T, "long double *"))
+        res = sizeof(long double *);
+    else if (!strcmp(T, "LinkedList"))
         res = sizeof(LinkedList);
-    else if (strcmp(T, "LinkedList *"))
+    else if (!strcmp(T, "LinkedList *"))
         res = sizeof(LinkedList *);
-    else if (strcmp(T, "Node"))
+    else if (!strcmp(T, "Node"))
         res = sizeof(Node);
-    else if (strcmp(T, "Node *"))
+    else if (!strcmp(T, "Node *"))
         res = sizeof(Node *);
+    else if (!strcmp(T, "size_t"))
+        res = sizeof(size_t);
+    else if (!strcmp(T, "size_t *"))
+        res = sizeof(size_t *);
+    else if (!strcmp(T, "void *"))
+        res = sizeof(void *);
     else
         printf("Error: unknown type.\n");
 
@@ -385,8 +407,8 @@ char *tolower_str(char *str)
     int l = strlen(str) + 1;
 
     // Allocazione dinamica della memoria per la nuova stringa (più 1 per '\0')
-    char *lower_str = malloc(l * sizeof(char));
-    
+    char *lower_str = (char *)malloc(l * SizeOf("char"));
+
     if (lower_str == NULL)
     {
         printf("malloc failed.\n");

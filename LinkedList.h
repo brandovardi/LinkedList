@@ -71,15 +71,15 @@ char *tolower_str(char *);
 #define ReplaceAt(this, data, index) \
     replace_at(this, &data, index, sizeof(data))
 
-#define GetHead(this) ( \
-    ((this) == NULL || (this)->head == NULL) ? NULL : (*(typeof((this)->head->data))((this)->head->data)))
+#define GetHead(this) \
+    ((this) == NULL || (this)->head == NULL) ? NULL : (*(typeof((this)->head->data))((this)->head->data))
 
 // non creo la funzione get_head(...) perché avendo un tipo generico per i valori della lista
 // dovrei ritornare un puntatore void (castato poi al tipo di data_type della lista)
 // quindi voglio evitare che un poi io mi debba gestire i puntatori dal main
 // così facendo invece vado a prendere direttamente il valore contenuto
-#define GetLast(this) ( \
-    ((this) == NULL || (this)->last == NULL) ? NULL : (*(typeof((this)->last->data))((this)->last->data)))
+#define GetLast(this) \
+    ((this) == NULL || (this)->last == NULL) ? NULL : (*(typeof((this)->last->data))((this)->last->data))
 
 // anche qua scrivo un if ternario e ciclo tutta la lista finche non trovo
 #define Get(this, index) (                                                   \
@@ -100,26 +100,46 @@ char *tolower_str(char *);
 #define Size(this) \
     size(this)
 
-#define TypeOf(T) _Generic((T),               \
-    char: "char",                             \
-    signed char: "signed char",               \
-    unsigned char: "unsigned char",           \
-    short: "short",                           \
-    unsigned short: "unsigned short",         \
-    int: "int",                               \
-    unsigned int: "unsigned int",             \
-    long: "long",                             \
-    unsigned long: "unsigned long",           \
-    long long: "long long",                   \
-    unsigned long long: "unsigned long long", \
-    float: "float",                           \
-    double: "double",                         \
-    long double: "long double",               \
-    char *: "string",                         \
-    LinkedList: "LinkedList",                 \
-    LinkedList *: "LinkedList *",             \
-    Node: "Node",                             \
-    Node *: "Node *",                         \
+// definisco una mia typeof perché quella presente in ctype.h non ritorna una stringa come valore
+// ma restituisce direttamente il tipo, quindi per aver la possibilità di controllare
+// i tipo di variabili (come il tipo dei valori inseriti nella lista generica), ho dovuto
+// usare una define che si espande con _Generic() che accetta come primo parametro il tipo
+// del parametro passato (quindi T in questo caso), e per ogni tipo restituisco la corrispondente
+// stringa
+#define TypeOf(T) _Generic((T),                   \
+    char: "char",                                 \
+    char *: "char *",                             \
+    signed char: "signed char",                   \
+    signed char *: "signed char *",               \
+    unsigned char: "unsigned char",               \
+    unsigned char *: "unsigned char *",           \
+    short: "short",                               \
+    short *: "short *",                           \
+    unsigned short: "unsigned short",             \
+    unsigned short *: "unsigned short *",         \
+    int: "int",                                   \
+    int *: "int *",                               \
+    unsigned int: "unsigned int",                 \
+    unsigned int *: "unsigned int *",             \
+    long: "long",                                 \
+    long *: "long *",                             \
+    unsigned long: "unsigned long",               \
+    unsigned long *: "unsigned long *",           \
+    long long: "long long",                       \
+    long long *: "long long *",                   \
+    unsigned long long: "unsigned long long",     \
+    unsigned long long *: "unsigned long long *", \
+    float: "float",                               \
+    float *: "float*",                            \
+    double: "double",                             \
+    double *: "double*",                          \
+    long double: "long double",                   \
+    long double *: "long double*",                \
+    LinkedList: "LinkedList",                     \
+    LinkedList *: "LinkedList *",                 \
+    Node: "Node",                                 \
+    Node *: "Node *",                             \
+    void *: "void *",                             \
     default: "unknown")
 
 #define SizeOf(T) \
