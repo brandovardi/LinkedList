@@ -25,7 +25,7 @@ typedef struct LinkedList
     char *data_type;
 } LinkedList;
 
-LinkedList *newLinkedList(char *data_type);
+LinkedList *CreateList(size_t data_size, char *data_type);
 
 bool insert_at(LinkedList *, void *, int, size_t);
 bool add_first(LinkedList *, void *, size_t);
@@ -40,6 +40,9 @@ void print_list(LinkedList *);
 int size(LinkedList *);
 size_t size_of(char *);
 char *tolower_str(char *);
+
+#define newLinkedList(type) \
+    CreateList(sizeof(type), #type)
 
 #define InsertAt(this, data, index) \
     __typeof__(data) _tmp = (data); \
@@ -106,40 +109,56 @@ char *tolower_str(char *);
 // usare una define che si espande con _Generic() che accetta come primo parametro il tipo
 // del parametro passato (quindi T in questo caso), e per ogni tipo restituisco la corrispondente
 // stringa
-#define TypeOf(T) _Generic((T),                   \
-    char: "char",                                 \
-    char *: "char *",                             \
-    signed char: "signed char",                   \
-    signed char *: "signed char *",               \
-    unsigned char: "unsigned char",               \
-    unsigned char *: "unsigned char *",           \
-    short: "short",                               \
-    short *: "short *",                           \
-    unsigned short: "unsigned short",             \
-    unsigned short *: "unsigned short *",         \
-    int: "int",                                   \
-    int *: "int *",                               \
-    unsigned int: "unsigned int",                 \
-    unsigned int *: "unsigned int *",             \
-    long: "long",                                 \
-    long *: "long *",                             \
-    unsigned long: "unsigned long",               \
-    unsigned long *: "unsigned long *",           \
-    long long: "long long",                       \
-    long long *: "long long *",                   \
-    unsigned long long: "unsigned long long",     \
-    unsigned long long *: "unsigned long long *", \
-    float: "float",                               \
-    float *: "float*",                            \
-    double: "double",                             \
-    double *: "double*",                          \
-    long double: "long double",                   \
-    long double *: "long double*",                \
-    LinkedList: "LinkedList",                     \
-    LinkedList *: "LinkedList *",                 \
-    Node: "Node",                                 \
-    Node *: "Node *",                             \
-    void *: "void *",                             \
+#define TypeOf(T) _Generic((T),                     \
+    char: "char",                                   \
+    char *: "char *",                               \
+    char **: "char **",                             \
+    signed char: "signed char",                     \
+    signed char *: "signed char *",                 \
+    signed char **: "signed char **",               \
+    unsigned char: "unsigned char",                 \
+    unsigned char *: "unsigned char *",             \
+    unsigned char **: "unsigned char **",           \
+    short: "short",                                 \
+    short *: "short *",                             \
+    short **: "short **",                           \
+    unsigned short: "unsigned short",               \
+    unsigned short *: "unsigned short *",           \
+    unsigned short **: "unsigned short **",         \
+    int: "int",                                     \
+    int *: "int *",                                 \
+    int **: "int **",                               \
+    unsigned int: "unsigned int",                   \
+    unsigned int *: "unsigned int *",               \
+    unsigned int **: "unsigned int **",             \
+    long: "long",                                   \
+    long *: "long *",                               \
+    long **: "long **",                             \
+    unsigned long: "unsigned long",                 \
+    unsigned long *: "unsigned long *",             \
+    unsigned long **: "unsigned long **",           \
+    long long: "long long",                         \
+    long long *: "long long *",                     \
+    long long **: "long long **",                   \
+    unsigned long long: "unsigned long long",       \
+    unsigned long long *: "unsigned long long *",   \
+    unsigned long long **: "unsigned long long **", \
+    float: "float",                                 \
+    float *: "float *",                             \
+    float **: "float **",                           \
+    double: "double",                               \
+    double *: "double *",                           \
+    double **: "double **",                         \
+    long double: "long double",                     \
+    long double *: "long double *",                 \
+    long double **: "long double **",               \
+    LinkedList: "LinkedList",                       \
+    LinkedList *: "LinkedList *",                   \
+    LinkedList **: "LinkedList **",                 \
+    Node: "Node",                                   \
+    Node *: "Node *",                               \
+    Node **: "Node **",                             \
+    void *: "void *",                               \
     default: "unknown")
 
 // definisco una sizeof che accetta come parametro una stringa del tipo da verificare (es. "char")

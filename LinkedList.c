@@ -1,6 +1,6 @@
 #include "LinkedList.h"
 
-LinkedList *newLinkedList(char *data_type)
+LinkedList *CreateList(size_t data_size, char *data_type)
 {
     LinkedList *this = NULL;
     data_type = ToLower(data_type);
@@ -329,70 +329,104 @@ size_t size_of(char *T)
         res = sizeof(char);
     else if (!strcmp(T, "char *"))
         res = sizeof(char *);
+    else if (!strcmp(T, "char **"))
+        res = sizeof(char **);
     else if (!strcmp(T, "signed char"))
         res = sizeof(signed char);
     else if (!strcmp(T, "signed char *"))
         res = sizeof(signed char *);
+    else if (!strcmp(T, "signed char **"))
+        res = sizeof(signed char **);
     else if (!strcmp(T, "unsigned char"))
         res = sizeof(unsigned char);
     else if (!strcmp(T, "unsigned char *"))
         res = sizeof(unsigned char *);
+    else if (!strcmp(T, "unsigned char **"))
+        res = sizeof(unsigned char **);
     else if (!strcmp(T, "short"))
         res = sizeof(short);
     else if (!strcmp(T, "short *"))
         res = sizeof(short *);
+    else if (!strcmp(T, "short **"))
+        res = sizeof(short **);
     else if (!strcmp(T, "unsigned short"))
         res = sizeof(unsigned short);
     else if (!strcmp(T, "unsigned short *"))
         res = sizeof(unsigned short *);
+    else if (!strcmp(T, "unsigned short **"))
+        res = sizeof(unsigned short **);
     else if (!strcmp(T, "int"))
         res = sizeof(int);
     else if (!strcmp(T, "int *"))
         res = sizeof(int *);
+    else if (!strcmp(T, "int **"))
+        res = sizeof(int **);
     else if (!strcmp(T, "unsigned int"))
         res = sizeof(unsigned int);
     else if (!strcmp(T, "unsigned int *"))
         res = sizeof(unsigned int *);
+    else if (!strcmp(T, "unsigned int **"))
+        res = sizeof(unsigned int **);
     else if (!strcmp(T, "long"))
         res = sizeof(long);
     else if (!strcmp(T, "long *"))
         res = sizeof(long *);
+    else if (!strcmp(T, "long **"))
+        res = sizeof(long **);
     else if (!strcmp(T, "unsigned long"))
         res = sizeof(unsigned long);
     else if (!strcmp(T, "unsigned long *"))
         res = sizeof(unsigned long *);
+    else if (!strcmp(T, "unsigned long **"))
+        res = sizeof(unsigned long **);
     else if (!strcmp(T, "long long"))
         res = sizeof(long long);
     else if (!strcmp(T, "long long *"))
         res = sizeof(long long *);
+    else if (!strcmp(T, "long long **"))
+        res = sizeof(long long **);
     else if (!strcmp(T, "unsigned long long"))
         res = sizeof(unsigned long long);
     else if (!strcmp(T, "unsigned long long *"))
         res = sizeof(unsigned long long *);
+    else if (!strcmp(T, "unsigned long long **"))
+        res = sizeof(unsigned long long **);
     else if (!strcmp(T, "float"))
         res = sizeof(float);
     else if (!strcmp(T, "float *"))
         res = sizeof(float *);
+    else if (!strcmp(T, "float **"))
+        res = sizeof(float **);
     else if (!strcmp(T, "double"))
         res = sizeof(double);
     else if (!strcmp(T, "double *"))
         res = sizeof(double *);
+    else if (!strcmp(T, "double **"))
+        res = sizeof(double **);
     else if (!strcmp(T, "long double"))
         res = sizeof(long double);
     else if (!strcmp(T, "long double *"))
         res = sizeof(long double *);
+    else if (!strcmp(T, "long double **"))
+        res = sizeof(long double **);
     else if (!strcmp(T, "LinkedList"))
         res = sizeof(LinkedList);
     else if (!strcmp(T, "LinkedList *"))
         res = sizeof(LinkedList *);
+    else if (!strcmp(T, "LinkedList **"))
+        res = sizeof(LinkedList **);
     else if (!strcmp(T, "Node"))
         res = sizeof(Node);
     else if (!strcmp(T, "Node *"))
         res = sizeof(Node *);
+    else if (!strcmp(T, "Node **"))
+        res = sizeof(Node **);
     else if (!strcmp(T, "size_t"))
         res = sizeof(size_t);
     else if (!strcmp(T, "size_t *"))
         res = sizeof(size_t *);
+    else if (!strcmp(T, "size_t **"))
+        res = sizeof(size_t **);
     else if (!strcmp(T, "void *"))
         res = sizeof(void *);
     else
