@@ -2,11 +2,10 @@
 
 int main()
 {
-    LinkedList* list = newLinkedList(long int);
+    LinkedList* list = newLinkedList(int);
     int x = 2, t = 2;
 
-    Add(list, 3);
-    PrintList(list);
+    InsertAt(list, 3, 0);
     
     free(list);
 

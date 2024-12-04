@@ -37,8 +37,11 @@ bool remove_at(LinkedList *, int);
 bool replace_head(LinkedList *, void *, size_t);
 bool replace_at(LinkedList *, void *, int, size_t);
 void print_list(LinkedList *);
+void *get_head(LinkedList *);
+void *get_last(LinkedList *);
+void *get(LinkedList *);
 int size(LinkedList *);
-size_t size_of(char *);
+size_t size_of(const char *);
 char *tolower_str(char *);
 
 #define newLinkedList(type) \
@@ -75,14 +78,14 @@ char *tolower_str(char *);
     replace_at(this, &data, index, sizeof(data))
 
 #define GetHead(this) \
-    ((this) == NULL || (this)->head == NULL) ? NULL : (*(typeof((this)->head->data))((this)->head->data))
+    get_head(this)
 
 // non creo la funzione get_head(...) perché avendo un tipo generico per i valori della lista
 // dovrei ritornare un puntatore void (castato poi al tipo di data_type della lista)
 // quindi voglio evitare che un poi io mi debba gestire i puntatori dal main
 // così facendo invece vado a prendere direttamente il valore contenuto
 #define GetLast(this) \
-    ((this) == NULL || (this)->last == NULL) ? NULL : (*(typeof((this)->last->data))((this)->last->data))
+    get_last(this)
 
 // anche qua scrivo un if ternario e ciclo tutta la lista finche non trovo
 #define Get(this, index) (                                                   \

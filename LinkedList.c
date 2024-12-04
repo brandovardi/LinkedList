@@ -6,7 +6,7 @@ LinkedList *CreateList(size_t data_size, char *data_type)
     data_type = ToLower(data_type);
     if (TypeOf(data_type) != NULL && TypeOf(data_type) != "unknown")
     {
-        this = (LinkedList *)malloc(SizeOf("LinkedList"));
+        this = (LinkedList *)malloc(sizeof(LinkedList));
         this->head = NULL;
         this->last = NULL;
         this->size = 0;
@@ -314,6 +314,16 @@ void print_list(LinkedList *this)
         printf("Error: the list is empty\n");
 }
 
+void *get_head(LinkedList *this)
+{
+    return (typeof(this->head->data))this->head->data;
+}
+
+void *get_last(LinkedList *this)
+{
+    return (typeof(this->last->data))this->last->data;
+}
+
 int size(LinkedList *this)
 {
     int size = 0;
@@ -321,46 +331,105 @@ int size(LinkedList *this)
     return size;
 }
 
-size_t size_of(char *T)
+size_t size_of(const char *T)
 {
+    int i = 0;
     size_t res = -1;
+    size_t pointer_lvl = 0;
 
+    char* token = strtok(T, " ");
+
+    // Keep printing tokens while one of the
+    // delimiters present in str[].
+    while (token != NULL && *(token+i) != '\0')
+    {
+        if (*(token+i) == '*')
+            pointer_lvl++;
+    }
+    if (pointer_lvl != strlen(strtok(T, " ")))
+
+    // char
     if (!strcmp(T, "char"))
         res = sizeof(char);
     else if (!strcmp(T, "char *"))
         res = sizeof(char *);
     else if (!strcmp(T, "char **"))
         res = sizeof(char **);
+    // signed char
     else if (!strcmp(T, "signed char"))
         res = sizeof(signed char);
     else if (!strcmp(T, "signed char *"))
         res = sizeof(signed char *);
     else if (!strcmp(T, "signed char **"))
         res = sizeof(signed char **);
+    // unsigned char
     else if (!strcmp(T, "unsigned char"))
         res = sizeof(unsigned char);
     else if (!strcmp(T, "unsigned char *"))
         res = sizeof(unsigned char *);
     else if (!strcmp(T, "unsigned char **"))
         res = sizeof(unsigned char **);
+    // short
     else if (!strcmp(T, "short"))
         res = sizeof(short);
     else if (!strcmp(T, "short *"))
         res = sizeof(short *);
     else if (!strcmp(T, "short **"))
         res = sizeof(short **);
+    // short int
+    else if (!strcmp(T, "short int"))
+        res = sizeof(short int);
+    else if (!strcmp(T, "short int *"))
+        res = sizeof(short int *);
+    else if (!strcmp(T, "short int **"))
+        res = sizeof(short int **);
+    // signed short
+    else if (!strcmp(T, "signed short"))
+        res = sizeof(signed short);
+    else if (!strcmp(T, "signed short *"))
+        res = sizeof(signed short *);
+    else if (!strcmp(T, "signed short **"))
+        res = sizeof(signed short **);
+    // signed short int
+    else if (!strcmp(T, "signed short int"))
+        res = sizeof(signed short int);
+    else if (!strcmp(T, "signed short int *"))
+        res = sizeof(signed short int *);
+    else if (!strcmp(T, "signed short int **"))
+        res = sizeof(signed short int **);
+    // unsigned short
     else if (!strcmp(T, "unsigned short"))
         res = sizeof(unsigned short);
     else if (!strcmp(T, "unsigned short *"))
         res = sizeof(unsigned short *);
     else if (!strcmp(T, "unsigned short **"))
         res = sizeof(unsigned short **);
+    // unsigned short int
+    else if (!strcmp(T, "unsigned short int"))
+        res = sizeof(unsigned short int);
+    else if (!strcmp(T, "unsigned short int *"))
+        res = sizeof(unsigned short int *);
+    else if (!strcmp(T, "unsigned short int **"))
+        res = sizeof(unsigned short int **);
+    // int
     else if (!strcmp(T, "int"))
         res = sizeof(int);
     else if (!strcmp(T, "int *"))
         res = sizeof(int *);
     else if (!strcmp(T, "int **"))
         res = sizeof(int **);
+    else if (!strcmp(T, "signed"))
+        res = sizeof(signed);
+    else if (!strcmp(T, "singed *"))
+        res = sizeof(signed *);
+    else if (!strcmp(T, "signed **"))
+        res = sizeof(signed **);
+    else if (!strcmp(T, "signed int"))
+        res = sizeof(signed int);
+    else if (!strcmp(T, "signed int *"))
+        res = sizeof(signed int *);
+    else if (!strcmp(T, "signed int **"))
+        res = sizeof(signed int **);
     else if (!strcmp(T, "unsigned int"))
         res = sizeof(unsigned int);
     else if (!strcmp(T, "unsigned int *"))
@@ -373,6 +442,12 @@ size_t size_of(char *T)
         res = sizeof(long *);
     else if (!strcmp(T, "long **"))
         res = sizeof(long **);
+    else if (!strcmp(T, "long int"))
+        res = sizeof(long int);
+    else if (!strcmp(T, "long int *"))
+        res = sizeof(long int *);
+    else if (!strcmp(T, "long int **"))
+        res = sizeof(long int **);
     else if (!strcmp(T, "unsigned long"))
         res = sizeof(unsigned long);
     else if (!strcmp(T, "unsigned long *"))
