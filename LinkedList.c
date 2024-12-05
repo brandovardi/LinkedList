@@ -19,15 +19,15 @@ typedef struct LinkedList
 LinkedList *CreateList(size_t data_size, char *data_type)
 {
     LinkedList *list = NULL;
-    data_type = ToLower(data_type);
-    if (TypeOf(data_type) != NULL && TypeOf(data_type) != "unknown")
+    if (data_type != NULL)
     {
+        data_type = ToLower(data_type);
         list = (LinkedList *)malloc(sizeof(LinkedList));
         list->head = NULL;
         list->last = NULL;
         list->size = 0;
         list->data_type = data_type;
-        list->data_size = SizeOf(data_type);
+        list->data_size = data_size;
     }
     else
         printf("Error: data_type is not valid\n");
@@ -39,9 +39,9 @@ bool insert_at(LinkedList *list, void *data, int index, size_t data_size)
     bool res = false;
     if (list != NULL && data != NULL && list->data_size == data_size && index >= 0)
     {
-        if (list->data_type == "char *")
+        if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
-        Node *newNode = (Node *)malloc(SizeOf("Node"));
+        Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
         memcpy(newNode->data, data, list->data_size);
         newNode->next = NULL;
@@ -79,9 +79,9 @@ bool add_first(LinkedList *list, void *data, size_t data_size)
     bool res = false;
     if (list != NULL && data != NULL && list->data_size == data_size)
     {
-        if (list->data_type == "char *")
+        if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
-        Node *newNode = (Node *)malloc(SizeOf("Node"));
+        Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
         newNode->next = NULL;
         newNode->prev = NULL;
@@ -108,14 +108,16 @@ bool add_first(LinkedList *list, void *data, size_t data_size)
     return res;
 }
 
-bool add(LinkedList *list, void *data, size_t data_size)
+bool add(LinkedList *list, void *data, bool same_type)
 {
     bool res = false;
-    if (!strcmp(list->data_type, "char *"))
-        data = *(char **)data;
-    if (list != NULL && data != NULL && list->data_size == data_size)
+
+    if (list != NULL && data != NULL && same_type)
     {
-        Node *newNode = (Node *)malloc(SizeOf("Node"));
+        if (!strcmp(list->data_type, "char *"))
+            data = *(char **)data;
+        
+        Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
         memcpy(newNode->data, data, list->data_size);
         newNode->next = NULL;
@@ -275,7 +277,7 @@ bool replace_head(LinkedList *list, void *data, size_t data_size)
     bool res = false;
     if (list != NULL && list->head != NULL && list->data_size == data_size)
     {
-        if (list->data_type == "char *")
+        if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
         free(list->head->data);
         list->head->data = NULL;
@@ -288,12 +290,30 @@ bool replace_head(LinkedList *list, void *data, size_t data_size)
     return res;
 }
 
+bool replace_last(LinkedList *list, void *data, size_t data_size)
+{
+    bool res = false;
+    if (list != NULL && list->last != NULL && list->data_size == data_size)
+    {
+        if (!strcmp(list->data_type, "char *"))
+            data = *(char **)data;
+        free(list->last->data);
+        list->last->data = NULL;
+        list->last->data = malloc(list->data_size);
+        memcpy(list->last->data, data, list->data_size);
+        res = true;
+    }
+    else
+        printf("Error while replacing the last element of the list.\n");
+    return res;
+}
+
 bool replace_at(LinkedList *list, void *data, int index, size_t data_size)
 {
     bool res = false;
     if (list != NULL && list->head != NULL && index >= 0 && list->data_size == data_size)
     {
-        if (TypeOf(list->data_size) == "char *")
+        if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
         if (!index)
             res = replace_head(list, data, data_size);
@@ -330,15 +350,15 @@ void print_list(LinkedList *list)
             {
                 // qui ho i tipi base
                 if (!strcmp(list->data_type, "int"))
-                    printf("%d\n", *(typeof(list->data_type) *)curr->data);
+                    printf("%d\n", *(__typeof__(list->data_type) *)curr->data);
                 if (!strcmp(list->data_type, "float"))
-                    printf("%f\n", *(typeof(list->data_type) *)curr->data);
+                    printf("%f\n", *(__typeof__(list->data_type) *)curr->data);
                 if (!strcmp(list->data_type, "double"))
-                    printf("%g\n", *(typeof(list->data_type) *)curr->data);
+                    printf("%g\n", *(__typeof__(list->data_type) *)curr->data);
                 if (!strcmp(list->data_type, "char"))
-                    printf("%c\n", *(typeof(list->data_type) *)curr->data);
+                    printf("%c\n", *(__typeof__(list->data_type) *)curr->data);
                 if (!strcmp(list->data_type, "unsigned int"))
-                    printf("%u\n", *(typeof(list->data_type) *)curr->data);
+                    printf("%u\n", *(__typeof__(list->data_type) *)curr->data);
             }
 
             curr = curr->next;
@@ -350,12 +370,12 @@ void print_list(LinkedList *list)
 
 void *get_head(LinkedList *list)
 {
-    return list->head->data;
+    return (list == NULL || list->head == NULL) ? NULL : (list->head->data);
 }
 
 void *get_last(LinkedList *list)
 {
-    return list->last->data;
+    return (list == NULL || list->last == NULL) ? NULL : (list->last->data);
 }
 
 void *get(LinkedList *list, size_t index)
@@ -580,7 +600,7 @@ char *tolower_str(const char *str)
     return lower_str;
 }
 
-char *type_of_list(LinkedList *list)
+char *get_list_type(LinkedList *list)
 {
-    return list->data_type;
+    return (list == NULL) ? "NULL" : list->data_type;
 }
