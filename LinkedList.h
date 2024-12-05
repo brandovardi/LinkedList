@@ -24,11 +24,14 @@
         add_first(list, &_tmp, sizeof(__typeof__(_tmp))); \
     }
 
-#define Add(list, data)                                                                                                          \
-    {                                                                                                                            \
-        __typeof__(data) _tmp = (data);                                                                                          \
-        add(list, &_tmp, (list == NULL ? 0 : ((GetHead(list) == NULL && SameType(GetHead(list), data)) ? 1 : 0))); \
+#define Add(list, data)                                                                                                                                                                \
+    {                                                                                                                                                                                  \
+        __typeof__(data) *_tmp = (data);                                                                                                                                               \
+        add(list, &_tmp, ((list == ((void *)0)) ? 0 : ((GetHead(list) == ((void *)0)) ? (SetHead(list, &_tmp, __typeof__(_tmp)) ? 1 : 0) : (SameType(GetHead(list), _tmp) ? 1 : 0)))); \
     }
+
+#define SetHead(list, data, type) \
+    set_head(list, data, #type)
 
 #define Clear(list) \
     clear(list)
@@ -94,10 +97,6 @@
 #define SameType(a, b) \
     (__builtin_types_compatible_p(__typeof__(a), __typeof__(b)))
 
-// definisco una sizeof che accetta come parametro una stringa del tipo da verificare (es. "char")
-#define SizeOf(T) \
-    size_of(T)
-
 // definisco ToLower() per le stringhe quella già esistente funziona solamente per i singoli caratteri
 #define ToLower(s) \
     tolower_str(s)
@@ -116,6 +115,7 @@ LinkedList *CreateList(size_t data_size, char *data_type);
 bool insert_at(LinkedList *, void *, int, size_t);
 bool add_first(LinkedList *, void *, size_t);
 bool add(LinkedList *, void *, bool);
+bool set_head(LinkedList *, void *, char *data_type);
 bool clear(LinkedList *);
 bool remove_last(LinkedList *);
 bool remove_head(LinkedList *);
@@ -129,7 +129,6 @@ void *get_last(LinkedList *);
 void *get(LinkedList *, size_t);
 char *get_list_type(LinkedList *);
 int size(LinkedList *);
-size_t size_of(char *);
 char *tolower_str(const char *);
 
 #endif
