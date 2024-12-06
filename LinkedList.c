@@ -1,12 +1,5 @@
 #include "LinkedList.h"
 
-typedef struct Node
-{
-    struct Node *prev;
-    void *data;
-    struct Node *next;
-} Node;
-
 typedef struct LinkedList
 {
     struct Node *head;
@@ -146,7 +139,7 @@ bool set_head(LinkedList *list, void *data, char *data_type)
     bool res = false;
 
     // la funzione viene eseguita soltanto una volta (o per meglio dire quando la lista è vuota)
-    if (list != NULL && list->head == NULL)
+    if (list != NULL && list->head->data == NULL && !strcmp(list->data_type, data_type))
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
@@ -359,7 +352,7 @@ bool replace_at(LinkedList *list, void *data, int index, size_t data_size)
 
 void print_list(LinkedList *list)
 {
-    if (list != NULL && list->head != NULL)
+    if (list != NULL && list->head->data != NULL)
     {
         Node *curr = list->head;
         while (curr != NULL)
@@ -390,17 +383,41 @@ void print_list(LinkedList *list)
         printf("Error: the list is empty\n");
 }
 
-void *get_head(LinkedList *list)
+Node *get_head(LinkedList *list)
 {
-    return (list == NULL || list->head == NULL) ? NULL : ((__typeof__(list->head->data) *)list->head->data);
+    Node *newHead;
+    if (list != NULL && list->head->data != NULL)
+    {
+        newHead = (Node *)malloc(sizeof(Node));
+        newHead->next = NULL;
+        newHead->prev = NULL;
+        newHead->data = malloc(list->data_size);
+        memcpy(newHead->data, list->head->data, list->data_size);
+    }
+    else
+        newHead = NULL;
+    
+    return newHead;
 }
 
-void *get_last(LinkedList *list)
+Node *get_last(LinkedList *list)
 {
-    return (list == NULL || list->last == NULL) ? NULL : (list->last->data);
+    Node *newLast;
+    if (list != NULL && list->last->data != NULL)
+    {
+        newLast = (Node *)malloc(sizeof(Node));
+        newLast->next = NULL;
+        newLast->prev = NULL;
+        newLast->data = malloc(list->data_size);
+        memcpy(newLast->data, list->last->data, list->data_size);
+    }
+    else
+        newLast = NULL;
+    
+    return newLast;
 }
 
-void *get(LinkedList *list, size_t index)
+Node *get(LinkedList *list, size_t index)
 {
     if (list != NULL && list->head != NULL)
     {

@@ -24,10 +24,10 @@
         add_first(list, &_tmp, sizeof(__typeof__(_tmp))); \
     }
 
-#define Add(list, data)                                                                                                                                                                \
-    {                                                                                                                                                                                  \
-        __typeof__(data) *_tmp = (data);                                                                                                                                               \
-        add(list, &_tmp, ((list == ((void *)0)) ? 0 : ((GetHead(list) == ((void *)0)) ? (SetHead(list, &_tmp, __typeof__(_tmp)) ? 1 : 0) : (SameType(GetHead(list), _tmp) ? 1 : 0)))); \
+#define Add(list, data)                                                                                                                                   \
+    {                                                                                                                                                     \
+        __typeof__(data) *_tmp = (data);                                                                                                                  \
+        add(list, &_tmp, ((list == NULL) ? 0 : ((GetHead(list) == NULL) ? (SetHead(list, &_tmp, __typeof__(_tmp)), 1) : SameType(GetHead(list), _tmp)))); \
     }
 
 #define SetHead(list, data, type) \
@@ -63,15 +63,13 @@
         replace_at(list, &_tmp, index, sizeof(__typeof__(_tmp))); \
     }
 
+// return a copy of the Node referred to the head element of the list
 #define GetHead(list) \
-    *((__typeof__(get_head(list)) *)get_head(list))
+    get_head(list)
 
-// non creo la funzione get_head(...) perché avendo un tipo generico per i valori della lista
-// dovrei ritornare un puntatore void (castato poi al tipo di data_type della lista)
-// quindi voglio evitare che un poi io mi debba gestire i puntatori dal main
-// così facendo invece vado a prendere direttamente il valore contenuto
+// return a copy of the Node referred to the last element of the list
 #define GetLast(list) \
-    *((__typeof__(get_last(list)) *)get_last(list))
+    get_last(list)
 
 // anche qua scrivo un if ternario e ciclo tutta la lista finche non trovo
 #define Get(list, index) \
@@ -107,7 +105,12 @@
     get_list_type(list)
 
 // dichiarazione opaca del nodo e della lista
-typedef struct Node Node;
+typedef struct Node
+{
+    struct Node *prev;
+    void *data;
+    struct Node *next;
+} Node;
 typedef struct LinkedList LinkedList;
 
 LinkedList *CreateList(size_t data_size, char *data_type);
@@ -124,69 +127,11 @@ bool replace_head(LinkedList *, void *, size_t);
 bool replace_last(LinkedList *, void *, size_t);
 bool replace_at(LinkedList *, void *, int, size_t);
 void print_list(LinkedList *);
-void *get_head(LinkedList *);
-void *get_last(LinkedList *);
-void *get(LinkedList *, size_t);
+Node *get_head(LinkedList *);
+Node *get_last(LinkedList *);
+Node *get(LinkedList *, size_t);
 char *get_list_type(LinkedList *);
 int size(LinkedList *);
 char *tolower_str(const char *);
 
 #endif
-
-// definisco una mia typeof perché quella presente in ctype.h non ritorna una stringa come valore
-// ma restituisce direttamente il tipo, quindi per aver la possibilità di controllare
-// i tipo di variabili (come il tipo dei valori inseriti nella lista generica), ho dovuto
-// usare una define che si espande con _Generic() che accetta come primo parametro il tipo
-// del parametro passato (quindi T in questo caso), e per ogni tipo restituisco la corrispondente
-// stringa
-// #define TypeOf(T) _Generic((T),                     \
-//     char: "char",                                   \
-//     char *: "char *",                               \
-//     char **: "char **",                             \
-//     signed char: "signed char",                     \
-//     signed char *: "signed char *",                 \
-//     signed char **: "signed char **",               \
-//     unsigned char: "unsigned char",                 \
-//     unsigned char *: "unsigned char *",             \
-//     unsigned char **: "unsigned char **",           \
-//     short: "short",                                 \
-//     short *: "short *",                             \
-//     short **: "short **",                           \
-//     unsigned short: "unsigned short",               \
-//     unsigned short *: "unsigned short *",           \
-//     unsigned short **: "unsigned short **",         \
-//     int: "int",                                     \
-//     int *: "int *",                                 \
-//     int **: "int **",                               \
-//     unsigned int: "unsigned int",                   \
-//     unsigned int *: "unsigned int *",               \
-//     unsigned int **: "unsigned int **",             \
-//     long: "long",                                   \
-//     long *: "long *",                               \
-//     long **: "long **",                             \
-//     unsigned long: "unsigned long",                 \
-//     unsigned long *: "unsigned long *",             \
-//     unsigned long **: "unsigned long **",           \
-//     long long: "long long",                         \
-//     long long *: "long long *",                     \
-//     long long **: "long long **",                   \
-//     unsigned long long: "unsigned long long",       \
-//     unsigned long long *: "unsigned long long *",   \
-//     unsigned long long **: "unsigned long long **", \
-//     float: "float",                                 \
-//     float *: "float *",                             \
-//     float **: "float **",                           \
-//     double: "double",                               \
-//     double *: "double *",                           \
-//     double **: "double **",                         \
-//     long double: "long double",                     \
-//     long double *: "long double *",                 \
-//     long double **: "long double **",               \
-//     LinkedList: "LinkedList",                       \
-//     LinkedList *: "LinkedList *",                   \
-//     LinkedList **: "LinkedList **",                 \
-//     Node: "Node",                                   \
-//     Node *: "Node *",                               \
-//     Node **: "Node **",                             \
-//     void *: "void *",                               \
-//     default: "unknown")
