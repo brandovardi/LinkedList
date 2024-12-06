@@ -187,7 +187,7 @@ bool remove_last(LinkedList *list)
         }
         (res && list->size > 0) ? (list->size--) : 0;
     }
-    else if (list != NULL || list->head == NULL)
+    else
         printf("Error: the list is empty\n");
     return res;
 }
@@ -224,7 +224,7 @@ bool remove_head(LinkedList *list)
         res = true;
         (list->size <= 0) ?: (list->size--);
     }
-    else if (list != NULL || list->head == NULL)
+    else
         printf("Error: the list is empty\n");
     return res;
 }
@@ -261,7 +261,7 @@ bool remove_at(LinkedList *list, unsigned int index)
         }
         (res && list->size > 0) ? (list->size--) : 0;
     }
-    else if (list != NULL || list->head == NULL || index < 0)
+    else
         printf("Error: empty list or invalid index.\n");
     return res;
 }
