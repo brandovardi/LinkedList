@@ -1,7 +1,5 @@
 #include "LinkedList.h"
 
-static void *type_list = NULL;
-
 typedef struct LinkedList
 {
     struct Node *head;
