@@ -27,14 +27,15 @@ LinkedList *CreateList(size_t data_size, char *data_type)
     return list;
 }
 
-bool insert_at(LinkedList *list, void *data, unsigned int index)
+bool insert_at(LinkedList *list, void *data, unsigned int index, char *data_type)
 {
     bool res = false;
     if (list->head == NULL)
     {
-        set_head(list, data);
+        res = set_head(list, data);
     }
-    else if (list != NULL && data != NULL && SameType(*list->head->data, *data)  && index >= 0)
+    // SameType(*(__typeof(*(list->head->data)) *)list->head->data, *data)
+    else if (list != NULL && data != NULL && SameType(*list->head->data, *data) && index >= 0)
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -52,10 +53,10 @@ bool insert_at(LinkedList *list, void *data, unsigned int index)
             ;
         // se l'utente vuole inserire l'elemento in posizione zero
         if (curr == list->head)
-            res = add_first(list, data);
+            res = add_first(list, data, data_type);
         // se invece vuole inserirlo alla fine
         else if (curr->next == NULL)
-            res = add(list, data);
+            res = add(list, data, data_type);
         // infine se vuole inserirlo in una posizione intermedia
         else
         {
@@ -71,12 +72,12 @@ bool insert_at(LinkedList *list, void *data, unsigned int index)
     return res;
 }
 
-bool add_first(LinkedList *list, void *data)
+bool add_first(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
     if (list->head == NULL)
     {
-        set_head(list, data);
+        res = set_head(list, data);
     }
     if (list != NULL && data != NULL && SameType(*list->head->data, *data))
     {
@@ -109,14 +110,14 @@ bool add_first(LinkedList *list, void *data)
     return res;
 }
 
-bool add(LinkedList *list, void *data)
+bool add(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
     if (list->head == NULL)
     {
-        set_head(list, data);
+        res = set_head(list, data);
     }
-    else if (list != NULL && data != NULL && SameType(*list->head->data, *data))
+    else if (list != NULL && data != NULL && !strcmp(list->data_type, data_type))
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -142,8 +143,8 @@ bool add(LinkedList *list, void *data)
 bool set_head(LinkedList *list, void *data)
 {
     bool res = false;
-    // la funzione viene eseguita soltanto una volta (o per meglio dire quando la lista è vuota)
-    if (list != NULL && list->head == NULL && sizeof(*data) == list->data_size)
+    
+    if (list != NULL && list->head == NULL && !strcmp(list->data_type, GetTypeOf(*data)))
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
@@ -398,17 +399,26 @@ Node *get_last_node(LinkedList *list)
 
 Node *get_node(LinkedList *list, size_t index)
 {
+    Node *curr = NULL;
+    int i;
     if (list != NULL && list->head != NULL)
     {
-        // typeof(list->head->data) res = *(list->head->data);
-
-        // if (index == 0)
-        // {
-        //     res =
-        // }
-
-        // Node *curr = list->head;
+        if (!index)
+        {
+            curr = get_head_node(list);
+        }
+        else if (index == size(list) - 1)
+        {
+            curr = get_last_node(list);
+        }
+        else
+        {
+            curr = list->head;
+            for (i = 0; i < index && curr->next != NULL; curr = curr->next, i++)
+                ;
+                }
     }
+    return curr;
 }
 
 int size(LinkedList *list)

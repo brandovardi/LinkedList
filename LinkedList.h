@@ -27,10 +27,10 @@
         add_first(list, &_tmp);         \
     }
 
-#define Add(list, data)                 \
-    {                                   \
-        __typeof__(data) _tmp = (data); \
-        add(list, &_tmp);               \
+#define Add(list, data)                    \
+    {                                      \
+        __typeof__(data) _tmp = (data);    \
+        add(list, &_tmp, GetTypeOf(_tmp)); \
     }
 
 // #define SetHead(list, data) \
@@ -91,7 +91,6 @@
 // #define GetListTypeOf(list) \
 //     get_list_type(list)
 
-// dichiarazione opaca del nodo e della lista
 typedef struct Node
 {
     struct Node *prev;
@@ -102,9 +101,9 @@ typedef struct LinkedList LinkedList;
 
 LinkedList *CreateList(size_t, char *);
 
-bool insert_at(LinkedList *, void *, unsigned int); // usare la macro
-bool add_first(LinkedList *, void *); // usare la macro
-bool add(LinkedList *, void *); // usare la macro
+bool insert_at(LinkedList *, void *, unsigned int, char *); // usare la macro
+bool add_first(LinkedList *, void *, char *);               // usare la macro
+bool add(LinkedList *, void *, char *);                     // usare la macro
 bool set_head(LinkedList *, void *);
 bool remove_last(LinkedList *);
 bool remove_head(LinkedList *);
@@ -118,8 +117,75 @@ Node *get_last_node(LinkedList *);
 Node *get_node(LinkedList *, size_t);
 char *get_list_type(LinkedList *);
 int size(LinkedList *);
-char *tolower_str(const char *);
 
 bool Clear(LinkedList *);
+
+char *tolower_str(const char *);
+
+#define GetTypeOf(T) _Generic((T),                    \
+    char: "char",                                     \
+    signed char: "signed char",                       \
+    unsigned char: "unsigned char",                   \
+    short: "short",                                   \
+    unsigned short: "unsigned short",                 \
+    int: "int",                                       \
+    unsigned int: "unsigned int",                     \
+    long: "long",                                     \
+    unsigned long: "unsigned long",                   \
+    long long: "long long",                           \
+    unsigned long long: "unsigned long long",         \
+    float: "float",                                   \
+    double: "double",                                 \
+    long double: "long double",                       \
+    char *: "char *",                                 \
+    signed char *: "signed char *",                   \
+    unsigned char *: "unsigned char *",               \
+    short *: "short *",                               \
+    unsigned short *: "unsigned short *",             \
+    int *: "int *",                                   \
+    unsigned int *: "unsigned int *",                 \
+    long *: "long *",                                 \
+    unsigned long *: "unsigned long *",               \
+    long long *: "long long *",                       \
+    unsigned long long *: "unsigned long long *",     \
+    float *: "float *",                               \
+    double *: "double *",                             \
+    long double *: "long double *",                   \
+    char **: "char **",                               \
+    signed char **: "signed char **",                 \
+    unsigned char **: "unsigned char **",             \
+    short **: "short **",                             \
+    unsigned short **: "unsigned short **",           \
+    int **: "int **",                                 \
+    unsigned int **: "unsigned int **",               \
+    long **: "long **",                               \
+    unsigned long **: "unsigned long **",             \
+    long long **: "long long **",                     \
+    unsigned long long **: "unsigned long long **",   \
+    float **: "float **",                             \
+    double **: "double **",                           \
+    long double **: "long double **",                 \
+    char ***: "char ***",                             \
+    signed char ***: "signed char ***",               \
+    unsigned char ***: "unsigned char ***",           \
+    short ***: "short ***",                           \
+    unsigned short ***: "unsigned short ***",         \
+    int ***: "int ***",                               \
+    unsigned int ***: "unsigned int ***",             \
+    long ***: "long ***",                             \
+    unsigned long ***: "unsigned long ***",           \
+    long long ***: "long long ***",                   \
+    unsigned long long ***: "unsigned long long ***", \
+    float ***: "float ***",                           \
+    double ***: "double ***",                         \
+    long double ***: "long double ***",               \
+    void *: "void *",                                 \
+    void **: "void **",                               \
+    void ***: "void ***",                             \
+    LinkedList: "LinkedList",                         \
+    LinkedList *: "LinkedList *",                     \
+    Node: "Node",                                     \
+    Node *: "Node *",                                 \
+    default: "undefined")
 
 #endif /* _LINKEDLIST_H_ */
