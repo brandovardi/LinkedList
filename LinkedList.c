@@ -7,7 +7,6 @@ typedef struct LinkedList
     size_t size;
     size_t data_size; // Dimensione di ogni elemento
     char *data_type;
-    
 } LinkedList;
 
 LinkedList *CreateList(size_t data_size, char *data_type)
@@ -31,12 +30,17 @@ LinkedList *CreateList(size_t data_size, char *data_type)
 bool insert_at(LinkedList *list, void *data, unsigned int index, char *data_type)
 {
     bool res = false;
-    if (list->head == NULL)
-    {
+    if (list == NULL)
+        printf("Error: the list doesn't exist.\n");
+    else if (data == NULL)
+        printf("Error: invalid data.\n");
+    else if (strcmp(list->data_type, data_type))
+        printf("Error: invalid data type.\n");
+    else if (index < 0 || index > list->size)
+        printf("Error: invelid index.\n");
+    else if (list->head == NULL)
         res = set_head(list, data);
-    }
-    // SameType(*(__typeof(*(list->head->data)) *)list->head->data, *data)
-    else if (list != NULL && data != NULL && SameType(*list->head->data, *data) && index >= 0)
+    else
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -68,19 +72,22 @@ bool insert_at(LinkedList *list, void *data, unsigned int index, char *data_type
         }
         (!res) ?: (list->size++);
     }
-    else
-        printf("Error: empty list or invalid data or invalid index.\n");
+
     return res;
 }
 
 bool add_first(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
-    if (list->head == NULL)
-    {
+    if (list == NULL)
+        printf("Error: the list doesn't exist.\n");
+    else if (data == NULL)
+        printf("Error: invalid data.\n");
+    else if (strcmp(list->data_type, data_type))
+        printf("Error: invalid data type.\n");
+    else if (list->head == NULL)
         res = set_head(list, data);
-    }
-    if (list != NULL && data != NULL && SameType(*list->head->data, *data))
+    else
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -106,8 +113,7 @@ bool add_first(LinkedList *list, void *data, char *data_type)
         res = true;
         list->size++;
     }
-    else
-        printf("Error: empty list or invalid data.\n");
+
     return res;
 }
 
@@ -119,10 +125,10 @@ bool add(LinkedList *list, void *data, char *data_type)
         printf("Error: the list doesn't exist.\n");
     else if (data == NULL)
         printf("Error: invalid data.\n");
-    else if (list->head == NULL)
-        res = set_head(list, data);
     else if (strcmp(list->data_type, data_type))
         printf("Error: invalid data type.\n");
+    else if (list->head == NULL)
+        res = set_head(list, data);
     else
     {
         if (!strcmp(list->data_type, "char *"))
@@ -235,7 +241,13 @@ bool remove_head(LinkedList *list)
 bool remove_at(LinkedList *list, unsigned int index)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && index >= 0)
+    if (index < 0 || index > list->size)
+        printf("Error: invalid index.\n");
+    else if (list == NULL)
+        printf("Error: list doesn't exist.\n");
+    else if (list->head == NULL)
+        printf("Error: empty list");
+    else
     {
         // controllo subito se vuole eliminare la testa, quindi se index == 0
         if (!index)
@@ -264,15 +276,13 @@ bool remove_at(LinkedList *list, unsigned int index)
         }
         (res && list->size > 0) ? (list->size--) : 0;
     }
-    else
-        printf("Error: empty list or invalid index.\n");
     return res;
 }
 
-bool replace_head(LinkedList *list, void *data)
+bool replace_head(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && SameType(*list->head->data, *data))
+    if (list != NULL && list->head != NULL && !strcmp(list->data_type, data_type))
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -287,10 +297,10 @@ bool replace_head(LinkedList *list, void *data)
     return res;
 }
 
-bool replace_last(LinkedList *list, void *data)
+bool replace_last(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
-    if (list != NULL && list->last != NULL && SameType(*list->head->data, *data))
+    if (list != NULL && list->last != NULL && !strcmp(list->data_type, data_type))
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -305,15 +315,15 @@ bool replace_last(LinkedList *list, void *data)
     return res;
 }
 
-bool replace_at(LinkedList *list, void *data, unsigned int index)
+bool replace_at(LinkedList *list, void *data, unsigned int index, char *data_type)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && index >= 0 && SameType(*list->head->data, *data))
+    if (list != NULL && list->head != NULL && index >= 0 && !strcmp(list->data_type, data_type))
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
         if (!index)
-            res = replace_head(list, data);
+            res = replace_head(list, data, data_type);
         else
         {
             int i;

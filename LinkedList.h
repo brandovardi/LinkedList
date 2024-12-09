@@ -15,22 +15,22 @@
     CreateList(sizeof(type), #type)
 // CreateList(sizeof(type), #type, (type *)malloc(sizeof(type)))
 
-#define InsertAt(list, data, index)                                          \
-    {                                                                        \
-        __typeof__(data) _tmp = (data);                                      \
-        insert_at(SameType(list, LinkedList *) ? list : NULL, &_tmp, index); \
+#define InsertAt(list, data, index)                                                             \
+    {                                                                                           \
+        __typeof__(data) _tmp = (data);                                                         \
+        insert_at((SameType(list, LinkedList *) ? list : NULL), &_tmp, index, GetTypeOf(_tmp)); \
     }
 
-#define AddFirst(list, data)                                          \
-    {                                                                 \
-        __typeof__(data) _tmp = (data);                               \
-        add_first(SameType(list, LinkedList *) ? list : NULL, &_tmp); \
+#define AddFirst(list, data)                                                             \
+    {                                                                                    \
+        __typeof__(data) _tmp = (data);                                                  \
+        add_first((SameType(list, LinkedList *) ? list : NULL), &_tmp, GetTypeOf(_tmp)); \
     }
 
-#define Add(list, data)                                                          \
-    {                                                                            \
-        __typeof__(data) _tmp = (data);                                          \
-        add(SameType(list, LinkedList *) ? list : NULL, &_tmp, GetTypeOf(_tmp)); \
+#define Add(list, data)                                                            \
+    {                                                                              \
+        __typeof__(data) _tmp = (data);                                            \
+        add((SameType(list, LinkedList *) ? list : NULL), &_tmp, GetTypeOf(_tmp)); \
     }
 
 // add(list, &_tmp, GetTypeOf(_tmp)); \
@@ -47,23 +47,23 @@
 // #define RemoveAt(list, index) \
 //     remove_at(list, index)
 
-// #define ReplaceHead(list, data, index)  \
-//     {                                   \
-//         __typeof__(data) _tmp = (data); \
-//         replace_head(list, &_tmp);      \
-//     }
+#define ReplaceHead(list, data, index)                                                      \
+    {                                                                                       \
+        __typeof__(data) _tmp = (data);                                                     \
+        replace_head((SameType(list, LinkedList *) ? list : NULL), &_tmp, GetTypeOf(_tmp)); \
+    }
 
-// #define ReplaceLast(list, data)         \
-//     {                                   \
-//         __typeof__(data) _tmp = (data); \
-//         replace_last(list, &_tmp);      \
-//     }
+#define ReplaceLast(list, data)                                                             \
+    {                                                                                       \
+        __typeof__(data) _tmp = (data);                                                     \
+        replace_last((SameType(list, LinkedList *) ? list : NULL), &_tmp, GetTypeOf(_tmp)); \
+    }
 
-// #define ReplaceAt(list, data, index)    \
-//     {                                   \
-//         __typeof__(data) _tmp = (data); \
-//         replace_at(list, &_tmp, index); \
-//     }
+#define ReplaceAt(list, data, index)                                                             \
+    {                                                                                            \
+        __typeof__(data) _tmp = (data);                                                          \
+        replace_at((SameType(list, LinkedList *) ? list : NULL), &_tmp, index, GetTypeOf(_tmp)); \
+    }
 
 // return a copy of the Node referred to the head element of the list
 // #define GetHeadNode(list) \
@@ -111,9 +111,9 @@ bool set_head(LinkedList *, void *);
 bool remove_last(LinkedList *);
 bool remove_head(LinkedList *);
 bool remove_at(LinkedList *, unsigned int);
-bool replace_head(LinkedList *, void *);
-bool replace_last(LinkedList *, void *);
-bool replace_at(LinkedList *, void *, unsigned int);
+bool replace_head(LinkedList *, void *, char *);
+bool replace_last(LinkedList *, void *, char *);
+bool replace_at(LinkedList *, void *, unsigned int, char *);
 void print_list(LinkedList *);
 Node *get_head_node(LinkedList *);
 Node *get_last_node(LinkedList *);
@@ -185,6 +185,8 @@ char *tolower_str(const char *);
     void *: "void *",                                 \
     void **: "void **",                               \
     void ***: "void ***",                             \
+    Node: "Node",                                     \
+    Node *: "Node *",                                 \
     default: "undefined")
 
 #endif /* _LINKEDLIST_H_ */
