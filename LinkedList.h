@@ -15,23 +15,25 @@
     CreateList(sizeof(type), #type)
 // CreateList(sizeof(type), #type, (type *)malloc(sizeof(type)))
 
-#define InsertAt(list, data, index)     \
-    {                                   \
-        __typeof__(data) _tmp = (data); \
-        insert_at(list, &_tmp, index);  \
+#define InsertAt(list, data, index)                                          \
+    {                                                                        \
+        __typeof__(data) _tmp = (data);                                      \
+        insert_at(SameType(list, LinkedList *) ? list : NULL, &_tmp, index); \
     }
 
-#define AddFirst(list, data)            \
-    {                                   \
-        __typeof__(data) _tmp = (data); \
-        add_first(list, &_tmp);         \
+#define AddFirst(list, data)                                          \
+    {                                                                 \
+        __typeof__(data) _tmp = (data);                               \
+        add_first(SameType(list, LinkedList *) ? list : NULL, &_tmp); \
     }
 
-#define Add(list, data)                    \
-    {                                      \
-        __typeof__(data) _tmp = (data);    \
-        add(list, &_tmp, GetTypeOf(_tmp)); \
+#define Add(list, data)                                                          \
+    {                                                                            \
+        __typeof__(data) _tmp = (data);                                          \
+        add(SameType(list, LinkedList *) ? list : NULL, &_tmp, GetTypeOf(_tmp)); \
     }
+
+// add(list, &_tmp, GetTypeOf(_tmp)); \
 
 // #define SetHead(list, data) \
 //     set_head(list, data)
@@ -97,6 +99,7 @@ typedef struct Node
     void *data;
     struct Node *next;
 } Node;
+
 typedef struct LinkedList LinkedList;
 
 LinkedList *CreateList(size_t, char *);
@@ -182,10 +185,6 @@ char *tolower_str(const char *);
     void *: "void *",                                 \
     void **: "void **",                               \
     void ***: "void ***",                             \
-    LinkedList: "LinkedList",                         \
-    LinkedList *: "LinkedList *",                     \
-    Node: "Node",                                     \
-    Node *: "Node *",                                 \
     default: "undefined")
 
 #endif /* _LINKEDLIST_H_ */

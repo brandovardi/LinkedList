@@ -7,6 +7,7 @@ typedef struct LinkedList
     size_t size;
     size_t data_size; // Dimensione di ogni elemento
     char *data_type;
+    
 } LinkedList;
 
 LinkedList *CreateList(size_t data_size, char *data_type)
@@ -113,11 +114,16 @@ bool add_first(LinkedList *list, void *data, char *data_type)
 bool add(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
-    if (list->head == NULL)
-    {
+
+    if (list == NULL)
+        printf("Error: the list doesn't exist.\n");
+    else if (data == NULL)
+        printf("Error: invalid data.\n");
+    else if (list->head == NULL)
         res = set_head(list, data);
-    }
-    else if (list != NULL && data != NULL && !strcmp(list->data_type, data_type))
+    else if (strcmp(list->data_type, data_type))
+        printf("Error: invalid data type.\n");
+    else
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -135,16 +141,14 @@ bool add(LinkedList *list, void *data, char *data_type)
         res = true;
         list->size++;
     }
-    else
-        printf("Error: empty list or invalid data.\n");
     return res;
 }
 
 bool set_head(LinkedList *list, void *data)
 {
     bool res = false;
-    
-    if (list != NULL && list->head == NULL && !strcmp(list->data_type, GetTypeOf(*data)))
+
+    if (list != NULL && list->head == NULL)
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
@@ -416,7 +420,7 @@ Node *get_node(LinkedList *list, size_t index)
             curr = list->head;
             for (i = 0; i < index && curr->next != NULL; curr = curr->next, i++)
                 ;
-                }
+        }
     }
     return curr;
 }
