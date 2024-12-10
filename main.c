@@ -3,7 +3,8 @@
 int main()
 {
     LinkedList *list = newLinkedList(int);
-
+    LinkedList *l2 = newLinkedList(float);
+    
     char * s = "45";
 
     Add(list, 1);

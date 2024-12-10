@@ -465,7 +465,7 @@ char *tolower_str(const char *str)
 
 char *get_list_type(LinkedList *list)
 {
-    return (list == NULL) ? "NULL" : list->data_type;
+    return (list == NULL) ? NULL : list->data_type;
 }
 
 bool Clear(LinkedList *list)
