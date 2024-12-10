@@ -9,11 +9,9 @@
 #ifndef _LINKEDLIST_H_
 #define _LINKEDLIST_H_
 
-// il nome della variabile lo dichairo così per evitare che l'utente utilizzi lo stesso nome
-// per un'altra variabile
+// Il type passato viene forzato a essere un puntatore valido, garantendo un controllo implicito del tipo.
 #define newLinkedList(type) \
-    CreateList(sizeof(type), #type)
-// CreateList(sizeof(type), #type, (type *)malloc(sizeof(type)))
+    CreateList(sizeof(*((type *)0)), #type)
 
 #define InsertAt(list, data, index)                                                             \
     {                                                                                           \

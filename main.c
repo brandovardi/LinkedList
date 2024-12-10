@@ -1,7 +1,5 @@
 #include "LinkedList.h"
 
-typedef struct Macchina Macchina;
-
 int main()
 {
     LinkedList *list = newLinkedList(int);
