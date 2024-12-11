@@ -129,68 +129,40 @@ bool Clear(LinkedList *);
 
 char *tolower_str(const char *);
 
-#define GetTypeOf(T) _Generic((T),                    \
-    char: "char",                                     \
-    signed char: "signed char",                       \
-    unsigned char: "unsigned char",                   \
-    short: "short",                                   \
-    unsigned short: "unsigned short",                 \
-    int: "int",                                       \
-    unsigned int: "unsigned int",                     \
-    long: "long",                                     \
-    unsigned long: "unsigned long",                   \
-    long long: "long long",                           \
-    unsigned long long: "unsigned long long",         \
-    float: "float",                                   \
-    double: "double",                                 \
-    long double: "long double",                       \
-    char *: "char *",                                 \
-    signed char *: "signed char *",                   \
-    unsigned char *: "unsigned char *",               \
-    short *: "short *",                               \
-    unsigned short *: "unsigned short *",             \
-    int *: "int *",                                   \
-    unsigned int *: "unsigned int *",                 \
-    long *: "long *",                                 \
-    unsigned long *: "unsigned long *",               \
-    long long *: "long long *",                       \
-    unsigned long long *: "unsigned long long *",     \
-    float *: "float *",                               \
-    double *: "double *",                             \
-    long double *: "long double *",                   \
-    char **: "char **",                               \
-    signed char **: "signed char **",                 \
-    unsigned char **: "unsigned char **",             \
-    short **: "short **",                             \
-    unsigned short **: "unsigned short **",           \
-    int **: "int **",                                 \
-    unsigned int **: "unsigned int **",               \
-    long **: "long **",                               \
-    unsigned long **: "unsigned long **",             \
-    long long **: "long long **",                     \
-    unsigned long long **: "unsigned long long **",   \
-    float **: "float **",                             \
-    double **: "double **",                           \
-    long double **: "long double **",                 \
-    char ***: "char ***",                             \
-    signed char ***: "signed char ***",               \
-    unsigned char ***: "unsigned char ***",           \
-    short ***: "short ***",                           \
-    unsigned short ***: "unsigned short ***",         \
-    int ***: "int ***",                               \
-    unsigned int ***: "unsigned int ***",             \
-    long ***: "long ***",                             \
-    unsigned long ***: "unsigned long ***",           \
-    long long ***: "long long ***",                   \
-    unsigned long long ***: "unsigned long long ***", \
-    float ***: "float ***",                           \
-    double ***: "double ***",                         \
-    long double ***: "long double ***",               \
-    void *: "void *",                                 \
-    void **: "void **",                               \
-    void ***: "void ***",                             \
-    Node: "Node",                                     \
-    Node *: "Node *",                                 \
+#define DECLARE_TYPE(type) \
+    type: #type,\
+    type * : #type " *",\
+    type ** : #type " **", \
+    type *** : #type " ***", \
+    type **** : #type " ****"
+
+#define BASE_TYPES(T) _Generic((T),   \
+    DECLARE_TYPE(char),               \
+    DECLARE_TYPE(signed char),        \
+    DECLARE_TYPE(unsigned char),      \
+    DECLARE_TYPE(short),              \
+    DECLARE_TYPE(unsigned short),     \
+    DECLARE_TYPE(int),                \
+    DECLARE_TYPE(unsigned int),       \
+    DECLARE_TYPE(long),               \
+    DECLARE_TYPE(unsigned long),      \
+    DECLARE_TYPE(long long),          \
+    DECLARE_TYPE(unsigned long long), \
+    DECLARE_TYPE(float),              \
+    DECLARE_TYPE(double),             \
+    DECLARE_TYPE(long double),        \
+    DECLARE_TYPE(Node),               \
+    void *: "void *",                 \
+    void **: "void **",               \
+    void ****: "void ****",           \
     default: "undefined")
+
+#ifdef USER_TYPES
+#define GetTypeOf(T) _Generic((T), \
+    USER_TYPES,                    \
+    default: BASE_TYPES(T))
+#else
+#define GetTypeOf(T) BASE_TYPES(T)
+#endif
 
 #endif /* _LINKEDLIST_H_ */

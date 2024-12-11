@@ -11,10 +11,14 @@ typedef struct LinkedList
 
 LinkedList *CreateList(size_t data_size, char *data_type)
 {
+    // if (!strcmp(get_data_type, "undefined"))
+    // {
+    //     printf("WARNING: if you want to create a list of a non base type,\n");
+    //     printf("you have to define your \n");
+    // }
     LinkedList *list = NULL;
     if (data_type != NULL)
     {
-        data_type = tolower_str(data_type);
         list = (LinkedList *)malloc(sizeof(LinkedList));
         list->head = NULL;
         list->last = NULL;
@@ -144,8 +148,7 @@ bool set_head(LinkedList *list, void *data)
 {
     bool res = false;
     if (list == NULL) NULL_LIST;
-    else if (list->head == NULL) EMPTY_LIST;
-    else
+    else if (list->head == NULL)
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
@@ -347,6 +350,7 @@ void print_list(LinkedList *list)
     else
     {
         Node *curr = list->head;
+        printf("List elements:\n");
         while (curr != NULL)
         {
             if (strstr(list->data_type, "*"))
