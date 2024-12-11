@@ -5,9 +5,10 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
 
-#ifndef _LINKEDLIST_H_
-#define _LINKEDLIST_H_
+#ifndef _LINKEDLIST_H
+#define _LINKEDLIST_H
 
 // Il type passato viene forzato a essere un puntatore valido, garantendo un controllo implicito del tipo.
 #define newLinkedList(type) \
@@ -31,19 +32,14 @@
         add((SameType(list, LinkedList *) ? list : NULL), &_tmp, GetTypeOf(_tmp)); \
     }
 
-// add(list, &_tmp, GetTypeOf(_tmp)); \
+#define RemoveLast(list) \
+    remove_last((SameType(list, LinkedList *) ? list : NULL))
 
-// #define SetHead(list, data) \
-//     set_head(list, data)
+#define RemoveHead(list) \
+    remove_head((SameType(list, LinkedList *) ? list : NULL))
 
-// #define RemoveLast(list) \
-//     remove_last(list)
-
-// #define RemoveHead(list) \
-//     remove_head(list)
-
-// #define RemoveAt(list, index) \
-//     remove_at(list, index)
+#define RemoveAt(list, index) \
+    remove_at((SameType(list, LinkedList *) ? list : NULL), index)
 
 #define ReplaceHead(list, data, index)                                                      \
     {                                                                                       \
@@ -64,38 +60,34 @@
     }
 
 // return a copy of the Node referred to the head element of the list
-// #define GetHeadNode(list) \
-//     get_head_node(list)
+#define GetHeadNode(list) \
+    get_head_node((SameType(list, LinkedList *) ? list : NULL))
 
 // return a copy of the Node referred to the last element of the list
-// #define GetLastNode(list) \
-//     get_last_node(list)
+#define GetLastNode(list) \
+    get_last_node((SameType(list, LinkedList *) ? list : NULL))
 
 // anche qua scrivo un if ternario e ciclo tutta la lista finche non trovo
-// #define GetNode(list, index) \
-//     get_node(list, index)
+#define GetNode(list, index) \
+    get_node((SameType(list, LinkedList *) ? list : NULL), index)
 
-// #define PrintList(list) \
-//     print_list(list)
+#define PrintList(list) \
+    print_list((SameType(list, LinkedList *) ? list : NULL))
 
-// #define Size(list) \
-//     size(list)
+#define Size(list) \
+    size((SameType(list, LinkedList *) ? list : NULL))
 
 #define SameType(a, b) \
     (__builtin_types_compatible_p(__typeof__(a), __typeof__(b)))
 
-// definisco ToLower() per le stringhe quella già esistente funziona solamente per i singoli caratteri
-// #define ToLower(s) \
-//     tolower_str(s)
+#define GetListTypeOf(list) \
+    get_list_type((SameType(list, LinkedList *) ? list : NULL))
 
-// #define GetListTypeOf(list) \
-//     get_list_type(list)
-
-#define NULL_LIST printf("Error: the list doesn't exist.\n")
-#define EMPTY_LIST printf("Error: the list is empty.\n")
-#define NULL_DATA printf("Error: invalid data.\n")
-#define INVALID_DATA_TYPE printf("Error: invalid data type\n")
-#define INDEX_OUT_OF_BOUND printf("Error: invalid index.\n")
+#define NULL_LIST printf("Exception - List is NULL.\n")
+#define EMPTY_LIST printf("Exception - List has no element.\n")
+#define NULL_DATA printf("Exception - Data is NULL.\n")
+#define INVALID_DATA_TYPE printf("Exception - Data Type is not valid.\n")
+#define INDEX_OUT_OF_BOUND printf("Exception - Index Out Of Bound.\n")
 
 typedef struct Node
 {
@@ -109,15 +101,14 @@ typedef struct LinkedList LinkedList;
 LinkedList *CreateList(size_t, char *);
 
 bool insert_at(LinkedList *, void *, size_t, char *); // usare la macro
-bool add_first(LinkedList *, void *, char *);               // usare la macro
-bool add(LinkedList *, void *, char *);                     // usare la macro
-bool set_head(LinkedList *, void *);
+bool add_first(LinkedList *, void *, char *);         // usare la macro
+bool add(LinkedList *, void *, char *);               // usare la macro
 bool remove_last(LinkedList *);
 bool remove_head(LinkedList *);
 bool remove_at(LinkedList *, size_t);
-bool replace_head(LinkedList *, void *, char *);
-bool replace_last(LinkedList *, void *, char *);
-bool replace_at(LinkedList *, void *, size_t, char *);
+bool replace_head(LinkedList *, void *, char *);       // usare la macro
+bool replace_last(LinkedList *, void *, char *);       // usare la macro
+bool replace_at(LinkedList *, void *, size_t, char *); // usare la macro
 void print_list(LinkedList *);
 Node *get_head_node(LinkedList *);
 Node *get_last_node(LinkedList *);
@@ -126,8 +117,6 @@ char *get_list_type(LinkedList *);
 int size(LinkedList *);
 
 bool Clear(LinkedList *);
-
-char *tolower_str(const char *);
 
 #define DECLARE_TYPE(type)                          \
     type:                                           \
@@ -166,4 +155,4 @@ char *tolower_str(const char *);
 #define GetTypeOf(T) BASE_TYPES(T)
 #endif
 
-#endif /* _LINKEDLIST_H_ */
+#endif /* _LINKEDLIST_H */
