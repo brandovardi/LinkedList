@@ -108,16 +108,16 @@ typedef struct LinkedList LinkedList;
 
 LinkedList *CreateList(size_t, char *);
 
-bool insert_at(LinkedList *, void *, unsigned int, char *); // usare la macro
+bool insert_at(LinkedList *, void *, size_t, char *); // usare la macro
 bool add_first(LinkedList *, void *, char *);               // usare la macro
 bool add(LinkedList *, void *, char *);                     // usare la macro
 bool set_head(LinkedList *, void *);
 bool remove_last(LinkedList *);
 bool remove_head(LinkedList *);
-bool remove_at(LinkedList *, unsigned int);
+bool remove_at(LinkedList *, size_t);
 bool replace_head(LinkedList *, void *, char *);
 bool replace_last(LinkedList *, void *, char *);
-bool replace_at(LinkedList *, void *, unsigned int, char *);
+bool replace_at(LinkedList *, void *, size_t, char *);
 void print_list(LinkedList *);
 Node *get_head_node(LinkedList *);
 Node *get_last_node(LinkedList *);
@@ -129,12 +129,13 @@ bool Clear(LinkedList *);
 
 char *tolower_str(const char *);
 
-#define DECLARE_TYPE(type) \
-    type: #type,\
-    type * : #type " *",\
-    type ** : #type " **", \
-    type *** : #type " ***", \
-    type **** : #type " ****"
+#define DECLARE_TYPE(type)                          \
+    type:                                           \
+    #type,                                          \
+        type * : #type " *",                        \
+                 type ** : #type " **",             \
+                           type *** : #type " ***", \
+                                      type **** : #type " ****"
 
 #define BASE_TYPES(T) _Generic((T),   \
     DECLARE_TYPE(char),               \
