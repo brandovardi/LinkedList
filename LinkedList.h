@@ -16,20 +16,19 @@
 #define InsertAt(list, data, index)                                                             \
     {                                                                                           \
         __typeof__(data) _tmp = (data);                                                         \
-        insert_at((SameType(list, LinkedList *) ? list : NULL), &_tmp, index, __my_tmp_type__); \
+        insert_at((SameType(list, LinkedList *) ? list : NULL), &_tmp, index, GetTypeOf(_tmp)); \
     }
 
 #define AddFirst(list, data)                                                             \
     {                                                                                    \
         __typeof__(data) _tmp = (data);                                                  \
-        add_first((SameType(list, LinkedList *) ? list : NULL), &_tmp, __my_tmp_type__); \
+        add_first((SameType(list, LinkedList *) ? list : NULL), &_tmp, GetTypeOf(_tmp)); \
     }
 
-#define Add(list, data)                                                                                                        \
-    {                                                                                                                          \
-        __typeof__(data) _tmp = (data);                                                                                        \
-        Node *head = get_head_node(list);                                                                                      \
-        add((SameType(list, LinkedList *) ? list : NULL), &_tmp, SameType(*(__typeof__(_tmp) *)head->data, __typeof__(_tmp))); \
+#define Add(list, data)                                                            \
+    {                                                                              \
+        __typeof__(data) _tmp = (data);                                            \
+        add((SameType(list, LinkedList *) ? list : NULL), &_tmp, GetTypeOf(_tmp)); \
     }
 
 // add(list, &_tmp, GetTypeOf(_tmp)); \
@@ -91,6 +90,12 @@
 
 // #define GetListTypeOf(list) \
 //     get_list_type(list)
+
+#define NULL_LIST printf("Error: the list doesn't exist.\n")
+#define EMPTY_LIST printf("Error: the list is empty.\n")
+#define NULL_DATA printf("Error: invalid data.\n")
+#define INVALID_DATA_TYPE printf("Error: invalid data type\n")
+#define INDEX_OUT_OF_BOUND printf("Error: invalid index.\n")
 
 typedef struct Node
 {

@@ -23,21 +23,17 @@ LinkedList *CreateList(size_t data_size, char *data_type)
         list->data_size = data_size;
     }
     else
-        printf("Error: data_type is not valid\n");
+        printf("Error: invalid data type\n");
     return list;
 }
 
 bool insert_at(LinkedList *list, void *data, unsigned int index, char *data_type)
 {
     bool res = false;
-    if (list == NULL)
-        printf("Error: the list doesn't exist.\n");
-    else if (data == NULL)
-        printf("Error: invalid data.\n");
-    else if (strcmp(list->data_type, data_type))
-        printf("Error: invalid data type.\n");
-    else if (index < 0 || index > list->size)
-        printf("Error: invelid index.\n");
+    if (list == NULL) NULL_LIST;
+    else if (data == NULL) NULL_DATA;
+    else if (strcmp(list->data_type, data_type)) INVALID_DATA_TYPE;
+    else if (index < 0 || index > list->size) INDEX_OUT_OF_BOUND;
     else if (list->head == NULL)
         res = set_head(list, data);
     else
@@ -79,12 +75,9 @@ bool insert_at(LinkedList *list, void *data, unsigned int index, char *data_type
 bool add_first(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
-    if (list == NULL)
-        printf("Error: the list doesn't exist.\n");
-    else if (data == NULL)
-        printf("Error: invalid data.\n");
-    else if (strcmp(list->data_type, data_type))
-        printf("Error: invalid data type.\n");
+    if (list == NULL) NULL_LIST;
+    else if (data == NULL) NULL_DATA;
+    else if (strcmp(list->data_type, data_type)) INVALID_DATA_TYPE;
     else if (list->head == NULL)
         res = set_head(list, data);
     else
@@ -121,12 +114,9 @@ bool add(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
 
-    if (list == NULL)
-        printf("Error: the list doesn't exist.\n");
-    else if (data == NULL)
-        printf("Error: invalid data.\n");
-    else if (strcmp(list->data_type, data_type))
-        printf("Error: invalid data type.\n");
+    if (list == NULL) NULL_LIST;
+    else if (data == NULL) NULL_DATA;
+    else if (strcmp(list->data_type, data_type)) INVALID_DATA_TYPE;
     else if (list->head == NULL)
         res = set_head(list, data);
     else
@@ -153,8 +143,9 @@ bool add(LinkedList *list, void *data, char *data_type)
 bool set_head(LinkedList *list, void *data)
 {
     bool res = false;
-
-    if (list != NULL && list->head == NULL)
+    if (list == NULL) NULL_LIST;
+    else if (list->head == NULL) EMPTY_LIST;
+    else
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
@@ -175,7 +166,9 @@ bool set_head(LinkedList *list, void *data)
 bool remove_last(LinkedList *list)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL)
+    if (list == NULL) NULL_LIST;
+    else if (list->head == NULL) EMPTY_LIST;
+    else
     {
         Node *last = list->last;
         // se la lista ha solo un elemento, quindi esiste soltanto la testa
@@ -196,15 +189,16 @@ bool remove_last(LinkedList *list)
         }
         (res && list->size > 0) ? (list->size--) : 0;
     }
-    else
-        printf("Error: the list is empty\n");
+
     return res;
 }
 
 bool remove_head(LinkedList *list)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL)
+    if (list == NULL) NULL_LIST;
+    else if (list->head == NULL) EMPTY_LIST;
+    else
     {
         // se la lista ha soltanto un elemento, quindi ha soltanto la testa
         if (list->head->next == NULL)
@@ -233,20 +227,16 @@ bool remove_head(LinkedList *list)
         res = true;
         (list->size <= 0) ?: (list->size--);
     }
-    else
-        printf("Error: the list is empty\n");
+
     return res;
 }
 
 bool remove_at(LinkedList *list, unsigned int index)
 {
     bool res = false;
-    if (index < 0 || index > list->size)
-        printf("Error: invalid index.\n");
-    else if (list == NULL)
-        printf("Error: list doesn't exist.\n");
-    else if (list->head == NULL)
-        printf("Error: empty list");
+    if (list == NULL) NULL_LIST;
+    else if (list->head == NULL) EMPTY_LIST;
+    else if (index < 0 || index > list->size) INDEX_OUT_OF_BOUND;
     else
     {
         // controllo subito se vuole eliminare la testa, quindi se index == 0
@@ -282,7 +272,10 @@ bool remove_at(LinkedList *list, unsigned int index)
 bool replace_head(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && !strcmp(list->data_type, data_type))
+    if (list == NULL) NULL_LIST;
+    else if (list->last == NULL) EMPTY_LIST;
+    else if (strcmp(list->data_type, data_type)) INVALID_DATA_TYPE;
+    else
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -292,15 +285,18 @@ bool replace_head(LinkedList *list, void *data, char *data_type)
         memcpy(list->head->data, data, list->data_size);
         res = true;
     }
-    else
-        printf("Error while replacing the head of the list.\n");
+
     return res;
 }
 
 bool replace_last(LinkedList *list, void *data, char *data_type)
 {
     bool res = false;
-    if (list != NULL && list->last != NULL && !strcmp(list->data_type, data_type))
+    if (list == NULL) NULL_LIST;
+    else if (list->last == NULL) EMPTY_LIST;
+    else if (data == NULL) NULL_DATA;
+    else if (strcmp(list->data_type, data_type)) INVALID_DATA_TYPE;
+    else
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -310,15 +306,18 @@ bool replace_last(LinkedList *list, void *data, char *data_type)
         memcpy(list->last->data, data, list->data_size);
         res = true;
     }
-    else
-        printf("Error while replacing the last element of the list.\n");
+
     return res;
 }
 
 bool replace_at(LinkedList *list, void *data, unsigned int index, char *data_type)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL && index >= 0 && !strcmp(list->data_type, data_type))
+    if (list == NULL) NULL_LIST;
+    else if (list->last == NULL) EMPTY_LIST;
+    else if (index < 0 || index > list->size) INDEX_OUT_OF_BOUND;
+    else if (strcmp(list->data_type, data_type)) INVALID_DATA_TYPE;
+    else
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
@@ -337,14 +336,15 @@ bool replace_at(LinkedList *list, void *data, unsigned int index, char *data_typ
             res = true;
         }
     }
-    else
-        printf("Error while replacing element in the list.\n");
+
     return res;
 }
 
 void print_list(LinkedList *list)
 {
-    if (list != NULL && list->head != NULL)
+    if (list == NULL) NULL_LIST;
+    else if (list->last == NULL) EMPTY_LIST;
+    else
     {
         Node *curr = list->head;
         while (curr != NULL)
@@ -371,14 +371,14 @@ void print_list(LinkedList *list)
             curr = curr->next;
         }
     }
-    else
-        printf("Error: the list is empty\n");
 }
 
 Node *get_head_node(LinkedList *list)
 {
-    Node *newHead;
-    if (list != NULL && list->head != NULL)
+    Node *newHead = NULL;
+    if (list == NULL) NULL_LIST;
+    else if (list->last == NULL) EMPTY_LIST;
+    else
     {
         newHead = (Node *)malloc(sizeof(Node));
         newHead->next = NULL;
@@ -386,16 +386,16 @@ Node *get_head_node(LinkedList *list)
         newHead->data = malloc(list->data_size);
         memcpy(newHead->data, list->head->data, list->data_size);
     }
-    else
-        newHead = NULL;
 
     return newHead;
 }
 
 Node *get_last_node(LinkedList *list)
 {
-    Node *newLast;
-    if (list != NULL && list->last != NULL)
+    Node *newLast = NULL;
+    if (list == NULL) NULL_LIST;
+    else if (list->last == NULL) EMPTY_LIST;
+    else
     {
         newLast = (Node *)malloc(sizeof(Node));
         newLast->next = NULL;
@@ -405,8 +405,6 @@ Node *get_last_node(LinkedList *list)
         if (!strcmp(list->data_type, "char"))
             newLast->data = *(char **)newLast->data;
     }
-    else
-        newLast = NULL;
 
     return newLast;
 }
@@ -415,7 +413,9 @@ Node *get_node(LinkedList *list, size_t index)
 {
     Node *curr = NULL;
     int i;
-    if (list != NULL && list->head != NULL)
+    if (list == NULL) NULL_LIST;
+    else if (list->head == NULL) EMPTY_LIST;
+    else
     {
         if (!index)
         {
@@ -438,7 +438,7 @@ Node *get_node(LinkedList *list, size_t index)
 int size(LinkedList *list)
 {
     int size = 0;
-    (list != NULL) ? (size = list->size) : printf("Error: the list doesn't exist.\n");
+    (list != NULL) ? (size = list->size) : NULL_LIST;
     return size;
 }
 
@@ -471,7 +471,9 @@ char *get_list_type(LinkedList *list)
 bool Clear(LinkedList *list)
 {
     bool res = false;
-    if (list != NULL && list->head != NULL)
+    if (list == NULL) NULL_LIST;
+    else if (list->head == NULL) EMPTY_LIST;
+    else
     {
         Node *curr = list->head;
         while (curr != NULL)
@@ -486,8 +488,6 @@ bool Clear(LinkedList *list)
         res = true;
         list->size = 0;
     }
-    else
-        printf("Error: the list is empty\n");
 
     return res;
 }
