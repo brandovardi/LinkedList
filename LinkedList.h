@@ -7,9 +7,6 @@
 #include <ctype.h>
 #include <errno.h>
 
-// per gestire le eccezioni (stack trace)
-#include <execinfo.h>
-
 #ifndef _LINKEDLIST_H
 #define _LINKEDLIST_H
 

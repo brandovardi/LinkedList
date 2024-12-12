@@ -1,4 +1,5 @@
 #include "LinkedList.h"
+#include "Exception.h"
 
 typedef struct LinkedList
 {
@@ -10,9 +11,7 @@ typedef struct LinkedList
 } LinkedList;
 
 static bool set_head(LinkedList *, void *);
-// funzione che mi gestisce le "eccezioni"
-static void validateList(char *, LinkedList *, char *, size_t, char *, bool, bool, bool, bool);
-static void printStackTrace();
+void validateList(char *, LinkedList *, char *, size_t, char *, bool, bool, bool, bool);
 
 LinkedList *CreateList(size_t data_size, char *data_type)
 {
@@ -323,7 +322,7 @@ bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
 
 void print_list(LinkedList *list)
 {
-    validateList("print_list()", list, NULL, -1, NULL, true, false, false, false);
+    validateList("print_list()", list, NULL, -1, NULL, false, false, false, false);
 
     Node *curr = list->head;
     int i = 0;
@@ -362,10 +361,12 @@ void print_list(LinkedList *list)
         else if (!strcmp(list->data_type, "char *"))
             printf("%s\n", (char *)curr->data);
         else
-            printf("%d- %x: %p\n", ++i, list->data_type, curr->data);
+            printf("%d- %s: %p\n", ++i, list->data_type, curr->data);
 
         curr = curr->next;
     }
+    if (list->size == 0)
+        printf("List is empty.\n");
 }
 
 Node *get_head_node(LinkedList *list)
@@ -451,7 +452,7 @@ bool Clear(LinkedList *list)
     return res;
 }
 
-static void validateList(char *funName, LinkedList *list, char *data, size_t index, char *datatype, bool checkhead, bool is_data, bool is_index, bool is_datatype)
+void validateList(char *funName, LinkedList *list, char *data, size_t index, char *datatype, bool checkhead, bool is_data, bool is_index, bool is_datatype)
 {
     bool res = false;
     if (list == NULL || (checkhead && list->head == NULL))
@@ -486,23 +487,3 @@ static void validateList(char *funName, LinkedList *list, char *data, size_t ind
     }
 }
 
-static void printStackTrace()
-{
-    size_t max_frames = 30; // Numero massimo di frame desiderati
-    void **array = malloc(max_frames * sizeof(void *));
-    if (!array)
-    {
-        fprintf(stderr, "Errore: allocazione memoria fallita\n");
-        return;
-    }
-
-    size_t size = backtrace(array, max_frames);
-    char **strings = backtrace_symbols(array, size);
-
-    printf("Stack trace:\n");
-    for (size_t i = 0; i < size; printf("%s\n", *(strings + i)), i++)
-        ;
-
-    free(strings);
-    free(array);
-}
