@@ -17,11 +17,17 @@ int main()
     LinkedList *list = newLinkedList(int);
     LinkedList *l2 = newLinkedList(Macchina *);
     LinkedList *l3 = newLinkedList(Moto *);
+    LinkedList *l1 = newLinkedList(char *);
     Macchina *m1 = (Macchina *)malloc(sizeof(Macchina));
-    Moto *m2 = (Moto *)malloc(sizeof(Moto));
+
+    Add(l1, "mia stringa");
+    char * g = "gg";
+    Add(l1, g);
+    PrintList(l1);
 
     Add(l2, m1);
-    Add(l3, m2);
+    Add(l3, (Moto *)malloc(sizeof(Moto)));
+    PrintList(l3);
 
     Add(list, 1);
     Add(list, 2);

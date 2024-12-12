@@ -12,6 +12,7 @@ typedef struct LinkedList
 static bool set_head(LinkedList *, void *);
 // funzione che mi gestisce le "eccezioni"
 static void validateList(char *, LinkedList *, char *, size_t, char *, bool, bool, bool, bool);
+static void printStackTrace();
 
 LinkedList *CreateList(size_t data_size, char *data_type)
 {
@@ -325,27 +326,43 @@ void print_list(LinkedList *list)
     validateList("print_list()", list, NULL, -1, NULL, true, false, false, false);
 
     Node *curr = list->head;
+    int i = 0;
     printf("List elements:\n");
     while (curr != NULL)
     {
-        if (strstr(list->data_type, "*"))
-        {
-            // qua ho puntatori
-        }
+        // qui ho i tipi base
+        if (!strcmp(list->data_type, "char"))
+            printf("%c\n", *(char *)curr->data);
+        else if (!strcmp(list->data_type, "signed char"))
+            printf("%hhd\n", *(signed char *)curr->data);
+        else if (!strcmp(list->data_type, "unsigned char"))
+            printf("%hhu\n", *(unsigned char *)curr->data);
+        else if (!strcmp(list->data_type, "short"))
+            printf("%hd\n", *(short *)curr->data);
+        else if (!strcmp(list->data_type, "unsigned short"))
+            printf("%hu\n", *(unsigned short *)curr->data);
+        else if (!strcmp(list->data_type, "int"))
+            printf("%d\n", *(int *)curr->data);
+        else if (!strcmp(list->data_type, "unsigned int"))
+            printf("%u\n", *(unsigned int *)curr->data);
+        else if (!strcmp(list->data_type, "long"))
+            printf("%ld\n", *(long *)curr->data);
+        else if (!strcmp(list->data_type, "unsigned long"))
+            printf("%lu\n", *(unsigned long *)curr->data);
+        else if (!strcmp(list->data_type, "long long"))
+            printf("%lld\n", *(long long *)curr->data);
+        else if (!strcmp(list->data_type, "unsigned long long"))
+            printf("%llu\n", *(unsigned long long *)curr->data);
+        else if (!strcmp(list->data_type, "float"))
+            printf("%f\n", *(float *)curr->data);
+        else if (!strcmp(list->data_type, "double"))
+            printf("%lf\n", *(double *)curr->data);
+        else if (!strcmp(list->data_type, "long double"))
+            printf("%Lf\n", *(long double *)curr->data);
+        else if (!strcmp(list->data_type, "char *"))
+            printf("%s\n", (char *)curr->data);
         else
-        {
-            // qui ho i tipi base
-            if (!strcmp(list->data_type, "int"))
-                printf("%d\n", *(__typeof__(list->data_type) *)curr->data);
-            else if (!strcmp(list->data_type, "float"))
-                printf("%f\n", *(__typeof__(list->data_type) *)curr->data);
-            else if (!strcmp(list->data_type, "double"))
-                printf("%g\n", *(__typeof__(list->data_type) *)curr->data);
-            else if (!strcmp(list->data_type, "char"))
-                printf("%c\n", *(__typeof__(list->data_type) *)curr->data);
-            else if (!strcmp(list->data_type, "unsigned int"))
-                printf("%u\n", *(__typeof__(list->data_type) *)curr->data);
-        }
+            printf("%d- %s: %p\n", ++i, list->data_type, curr->data);
 
         curr = curr->next;
     }
@@ -434,7 +451,7 @@ bool Clear(LinkedList *list)
     return res;
 }
 
-static void validateList(char* funName, LinkedList *list, char *data, size_t index, char *datatype, bool checkhead, bool is_data, bool is_index, bool is_datatype)
+static void validateList(char *funName, LinkedList *list, char *data, size_t index, char *datatype, bool checkhead, bool is_data, bool is_index, bool is_datatype)
 {
     bool res = false;
     if (list == NULL || (checkhead && list->head == NULL))
@@ -463,7 +480,28 @@ static void validateList(char* funName, LinkedList *list, char *data, size_t ind
     }
     if (res)
     {
-        printf("Exception from: %s\n", funName);
+        printf("Exception from: %s. ", funName);
+        printStackTrace();
         exit(EXIT_FAILURE);
     }
+}
+
+static void printStackTrace()
+{
+    void *array[10]; // Array per salvare i puntatori dello stack
+    size_t size;
+
+    // Ottieni i puntatori dello stack
+    size = backtrace(array, 10);
+
+    // Converte i puntatori in stringhe leggibili
+    char **strings = backtrace_symbols(array, size);
+
+    printf("Stack trace:\n");
+    for (size_t i = 0; i < size; i++)
+    {
+        printf("%s\n", strings[i]);
+    }
+
+    free(strings); // Libera la memoria allocata da backtrace_symbols
 }

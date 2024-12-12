@@ -7,6 +7,12 @@
 #include <ctype.h>
 #include <errno.h>
 
+// per gestire le eccezioni (stack trace)
+#include <cxxabi.h>
+#include <backtrace.h>
+#include <cstdlib>
+#include <cstdio>
+
 #ifndef _LINKEDLIST_H
 #define _LINKEDLIST_H
 
