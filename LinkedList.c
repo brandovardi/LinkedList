@@ -362,7 +362,7 @@ void print_list(LinkedList *list)
         else if (!strcmp(list->data_type, "char *"))
             printf("%s\n", (char *)curr->data);
         else
-            printf("%d- %s: %p\n", ++i, list->data_type, curr->data);
+            printf("%d- %x: %p\n", ++i, list->data_type, curr->data);
 
         curr = curr->next;
     }
@@ -480,7 +480,7 @@ static void validateList(char *funName, LinkedList *list, char *data, size_t ind
     }
     if (res)
     {
-        printf("Exception from: %s. ", funName);
+        printf("Exception from: %s; ", funName);
         printStackTrace();
         exit(EXIT_FAILURE);
     }
@@ -488,20 +488,21 @@ static void validateList(char *funName, LinkedList *list, char *data, size_t ind
 
 static void printStackTrace()
 {
-    void *array[10]; // Array per salvare i puntatori dello stack
-    size_t size;
+    size_t max_frames = 30; // Numero massimo di frame desiderati
+    void **array = malloc(max_frames * sizeof(void *));
+    if (!array)
+    {
+        fprintf(stderr, "Errore: allocazione memoria fallita\n");
+        return;
+    }
 
-    // Ottieni i puntatori dello stack
-    size = backtrace(array, 10);
-
-    // Converte i puntatori in stringhe leggibili
+    size_t size = backtrace(array, max_frames);
     char **strings = backtrace_symbols(array, size);
 
     printf("Stack trace:\n");
-    for (size_t i = 0; i < size; i++)
-    {
-        printf("%s\n", strings[i]);
-    }
+    for (size_t i = 0; i < size; printf("%s\n", *(strings + i)), i++)
+        ;
 
-    free(strings); // Libera la memoria allocata da backtrace_symbols
+    free(strings);
+    free(array);
 }
