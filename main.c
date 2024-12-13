@@ -1,6 +1,7 @@
 #define USER_TYPES DECLARE_TYPE(Macchina), DECLARE_TYPE(Moto)
 
 #include "LinkedList.h"
+#include <stdio.h>
 
 typedef struct Macchina
 {
@@ -20,7 +21,7 @@ int main()
     LinkedList *l1 = newLinkedList(char *);
     Macchina *m1 = (Macchina *)malloc(sizeof(Macchina));
 
-    Add(l1, "mia stringa");
+    Add(l1, "mia sottostringa");
     char * g = "gg";
     Add(l1, g);
     PrintList(l1);

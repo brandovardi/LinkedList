@@ -48,9 +48,10 @@ bool insert_at(LinkedList *list, void *data, size_t index, char *data_type)
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
+
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
-        memcpy(newNode->data, data, list->data_size);
+        memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
         newNode->next = NULL;
         newNode->prev = NULL;
 
@@ -91,11 +92,12 @@ bool add_first(LinkedList *list, void *data, char *data_type)
     {
         if (!strcmp(list->data_type, "char *"))
             data = *(char **)data;
+
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
         newNode->next = NULL;
         newNode->prev = NULL;
-        memcpy(newNode->data, data, list->data_size);
+        memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
         // controllo se la testa esiste, quindi se la lista ha già un elemento
         // se ha già una testa allora il newNode deve diventare la testa quindi
         // faccio puntare al suo ->next la testa che sarebbe ora il primo elemento
@@ -131,7 +133,7 @@ bool add(LinkedList *list, void *data, char *data_type)
 
         Node *newNode = (Node *)malloc(sizeof(Node));
         newNode->data = malloc(list->data_size);
-        memcpy(newNode->data, data, list->data_size);
+        memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
         newNode->next = NULL;
         newNode->prev = NULL;
 
@@ -153,7 +155,7 @@ static bool set_head(LinkedList *list, void *data)
     bool res = false;
     Node *newNode = (Node *)malloc(sizeof(Node));
     newNode->data = malloc(list->data_size);
-    memcpy(newNode->data, data, list->data_size);
+    memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     newNode->next = NULL;
     newNode->prev = NULL;
 
@@ -268,12 +270,14 @@ bool replace_head(LinkedList *list, void *data, char *data_type)
     validateList("replace_head()", list, data, -1, data_type, true, true, false, true);
 
     bool res = false;
+
     if (!strcmp(list->data_type, "char *"))
         data = *(char **)data;
+
     free(list->head->data);
     list->head->data = NULL;
     list->head->data = malloc(list->data_size);
-    memcpy(list->head->data, data, list->data_size);
+    memcpy(list->head->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     res = true;
 
     return res;
@@ -284,12 +288,14 @@ bool replace_last(LinkedList *list, void *data, char *data_type)
     validateList("replace_last()", list, data, -1, data_type, true, true, false, true);
 
     bool res = false;
+
     if (!strcmp(list->data_type, "char *"))
         data = *(char **)data;
+
     free(list->last->data);
     list->last->data = NULL;
     list->last->data = malloc(list->data_size);
-    memcpy(list->last->data, data, list->data_size);
+    memcpy(list->last->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     res = true;
 
     return res;
@@ -302,6 +308,7 @@ bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
     bool res = false;
     if (!strcmp(list->data_type, "char *"))
         data = *(char **)data;
+
     if (!index)
         res = replace_head(list, data, data_type);
     else
@@ -313,7 +320,7 @@ bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
         free(curr->data);
         curr->data = NULL;
         curr->data = malloc(list->data_size);
-        memcpy(curr->data, data, list->data_size);
+        memcpy(curr->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
         res = true;
     }
 
@@ -378,7 +385,7 @@ Node *get_head_node(LinkedList *list)
     newHead->next = NULL;
     newHead->prev = NULL;
     newHead->data = malloc(list->data_size);
-    memcpy(newHead->data, list->head->data, list->data_size);
+    memcpy(newHead->data, list->head->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)list->head->data) + 1) : list->data_size));
 
     return newHead;
 }
@@ -392,7 +399,7 @@ Node *get_last_node(LinkedList *list)
     newLast->next = NULL;
     newLast->prev = NULL;
     newLast->data = malloc(list->data_size);
-    memcpy(newLast->data, list->last->data, list->data_size);
+    memcpy(newLast->data, list->last->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)list->head->data) + 1) : list->data_size));
     if (!strcmp(list->data_type, "char"))
         newLast->data = *(char **)newLast->data;
 
@@ -403,20 +410,29 @@ Node *get_node(LinkedList *list, size_t index)
 {
     validateList("get_node()", list, NULL, index, NULL, true, false, true, false);
 
+    Node *newNode = NULL;
     Node *curr = NULL;
     int i;
     if (!index)
-        curr = get_head_node(list);
+        newNode = get_head_node(list);
     else if (index == size(list) - 1)
-        curr = get_last_node(list);
+        newNode = get_last_node(list);
     else
     {
         curr = list->head;
         for (i = 0; i < index && curr->next != NULL; curr = curr->next, i++)
             ;
+        newNode = (Node *)malloc(sizeof(Node));
+        newNode->next = NULL;
+        newNode->prev = NULL;
+        newNode->data = malloc(list->data_size);
+        memcpy(newNode->data, curr->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)list->head->data) + 1) : list->data_size));
+
+        if (!strcmp(list->data_type, "char"))
+            newNode->data = *(char **)newNode->data;
     }
 
-    return curr;
+    return newNode;
 }
 
 int size(LinkedList *list)
@@ -486,4 +502,3 @@ void validateList(char *funName, LinkedList *list, char *data, size_t index, cha
         exit(EXIT_FAILURE);
     }
 }
-

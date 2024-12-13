@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
-#include <errno.h>
 
 #ifndef _LINKEDLIST_H
 #define _LINKEDLIST_H
