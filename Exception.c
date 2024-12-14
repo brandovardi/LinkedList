@@ -29,7 +29,7 @@ void printStackTrace()
     free(symbol);
     SymCleanup(process);
 }
-#else
+#elif __linux__
 void printStackTrace()
 {
     size_t max_frames = 30; // Numero massimo di frame desiderati

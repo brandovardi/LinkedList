@@ -5,7 +5,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <DbgHelp.h>
-#else
+#elif __linux__
 #include <execinfo.h>
 #endif
 
