@@ -40,7 +40,7 @@
 #define RemoveAt(list, index) \
     remove_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
 
-#define ReplaceHead(list, data, index)                                                                          \
+#define ReplaceHead(list, data)                                                                                 \
     {                                                                                                           \
         __typeof__(data) _tmp = (data);                                                                         \
         replace_head((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
@@ -71,7 +71,7 @@
     get_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
 
 #define PrintList(list, ...) \
-    print_list((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), (__VA_ARGS__) ? : NULL)
+    print_list((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
 #define Size(list) \
     size((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
@@ -108,7 +108,7 @@ bool remove_at(LinkedList *, size_t);
 bool replace_head(LinkedList *, void *, char *);       // usare la macro
 bool replace_last(LinkedList *, void *, char *);       // usare la macro
 bool replace_at(LinkedList *, void *, size_t, char *); // usare la macro
-void print_list(LinkedList *, void (*)(void *));
+void print_list(LinkedList *);
 Node *get_head_node(LinkedList *);
 Node *get_last_node(LinkedList *);
 Node *get_node(LinkedList *, size_t);

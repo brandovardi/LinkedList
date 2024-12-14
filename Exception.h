@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-
 #ifndef _EXCEPTION_H
 #define _EXCEPTION_H
 

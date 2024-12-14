@@ -24,6 +24,8 @@ int main(int argc, char const *argv[])
     char * g = "gg";
     Add(l1, g);
     PrintList(l1);
+    ReplaceHead(l1, "ciao");
+    PrintList(l1);
 
     Add(l2, m1);
     Add(l3, (Moto *)malloc(sizeof(Moto)));
