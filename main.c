@@ -12,7 +12,7 @@ typedef struct Moto
     int tipo;
 } Moto;
 
-int main()
+int main(int argc, char const *argv[])
 {
     LinkedList *list = newLinkedList(int);
     LinkedList *l2 = newLinkedList(Macchina *);
@@ -33,13 +33,14 @@ int main()
     Add(list, 2);
     Add(list, 90);
 
-    Node *f = get_node(list, size(list) - 1);
-    int fgata = *(int *)f->data;
+    const Node *f = get_node(list, size(list) - 1);
+    const int fdata = *(int *)f->data;
+    printf("%d\n", fdata);
     PrintList(list);
-
     FreeList(list);
-
     print_list(list);
 
-    return 0;
+    free(m1);
+
+    return EXIT_SUCCESS;
 }

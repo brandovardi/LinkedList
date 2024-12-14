@@ -9,78 +9,78 @@
 #ifndef _LINKEDLIST_H
 #define _LINKEDLIST_H
 
-// Il type passato viene forzato a essere un puntatore valido, garantendo un controllo implicito del tipo.
+// Il tipo passato viene forzato a essere un puntatore valido, garantendo un controllo implicito del tipo.
 #define newLinkedList(type) \
     CreateList(sizeof(*((type *)0)), #type)
 
-#define InsertAt(list, data, index)                                                             \
-    {                                                                                           \
-        __typeof__(data) _tmp = (data);                                                         \
-        insert_at((SameType(list, LinkedList *) ? (list) : (NULL)), &_tmp, index, GetTypeOf(_tmp)); \
+#define InsertAt(list, data, index)                                                                                 \
+    {                                                                                                               \
+        __typeof__(data) _tmp = (data);                                                                             \
+        insert_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, index, GetTypeOf(_tmp)); \
     }
 
-#define AddFirst(list, data)                                                             \
-    {                                                                                    \
-        __typeof__(data) _tmp = (data);                                                  \
-        add_first((SameType(list, LinkedList *) ? (list) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
+#define AddFirst(list, data)                                                                                 \
+    {                                                                                                        \
+        __typeof__(data) _tmp = (data);                                                                      \
+        add_first((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
     }
 
-#define Add(list, data)                                                            \
-    {                                                                              \
-        __typeof__(data) _tmp = (data);                                            \
-        add((SameType(list, LinkedList *) ? (list) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
+#define Add(list, data)                                                                                \
+    {                                                                                                  \
+        __typeof__(data) _tmp = (data);                                                                \
+        add((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
     }
 
 #define RemoveLast(list) \
-    remove_last((SameType(list, LinkedList *) ? (list) : (NULL)))
+    remove_last((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
 #define RemoveHead(list) \
-    remove_head((SameType(list, LinkedList *) ? (list) : (NULL)))
+    remove_head((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
 #define RemoveAt(list, index) \
-    remove_at((SameType(list, LinkedList *) ? (list) : (NULL)), index)
+    remove_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
 
-#define ReplaceHead(list, data, index)                                                      \
-    {                                                                                       \
-        __typeof__(data) _tmp = (data);                                                     \
-        replace_head((SameType(list, LinkedList *) ? (list) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
+#define ReplaceHead(list, data, index)                                                                          \
+    {                                                                                                           \
+        __typeof__(data) _tmp = (data);                                                                         \
+        replace_head((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
     }
 
-#define ReplaceLast(list, data)                                                             \
-    {                                                                                       \
-        __typeof__(data) _tmp = (data);                                                     \
-        replace_last((SameType(list, LinkedList *) ? (list) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
+#define ReplaceLast(list, data)                                                                                 \
+    {                                                                                                           \
+        __typeof__(data) _tmp = (data);                                                                         \
+        replace_last((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
     }
 
-#define ReplaceAt(list, data, index)                                                             \
-    {                                                                                            \
-        __typeof__(data) _tmp = (data);                                                          \
-        replace_at((SameType(list, LinkedList *) ? (list) : (NULL)), &_tmp, index, GetTypeOf(_tmp)); \
+#define ReplaceAt(list, data, index)                                                                                 \
+    {                                                                                                                \
+        __typeof__(data) _tmp = (data);                                                                              \
+        replace_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, index, GetTypeOf(_tmp)); \
     }
 
 // return a copy of the Node referred to the head element of the list
 #define GetHeadNode(list) \
-    get_head_node((SameType(list, LinkedList *) ? (list) : (NULL)))
+    get_head_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
 // return a copy of the Node referred to the last element of the list
 #define GetLastNode(list) \
-    get_last_node((SameType(list, LinkedList *) ? (list) : NULL))
+    get_last_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : NULL))
 
 // anche qua scrivo un if ternario e ciclo tutta la lista finche non trovo
 #define GetNode(list, index) \
-    get_node((SameType(list, LinkedList *) ? (list) : (NULL)), index)
+    get_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
 
-#define PrintList(list) \
-    print_list((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
+#define PrintList(list, ...) \
+    print_list((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), (__VA_ARGS__) ? : NULL)
 
 #define Size(list) \
-    size((SameType(list, LinkedList *) ? (list) : (NULL)))
+    size((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
 #define SameType(a, b) \
     (__builtin_types_compatible_p(__typeof__(a), __typeof__(b)))
 
 #define GetListTypeOf(list) \
-    get_list_type((SameType(list, LinkedList *) ? (list) : (NULL)))
+    get_list_type((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
 #define NULL_LIST printf("Exception - List is NULL.\n")
 #define EMPTY_LIST printf("Exception - List has no element.\n")
@@ -108,7 +108,7 @@ bool remove_at(LinkedList *, size_t);
 bool replace_head(LinkedList *, void *, char *);       // usare la macro
 bool replace_last(LinkedList *, void *, char *);       // usare la macro
 bool replace_at(LinkedList *, void *, size_t, char *); // usare la macro
-void print_list(LinkedList *);
+void print_list(LinkedList *, void (*)(void *));
 Node *get_head_node(LinkedList *);
 Node *get_last_node(LinkedList *);
 Node *get_node(LinkedList *, size_t);

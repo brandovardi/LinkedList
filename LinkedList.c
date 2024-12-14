@@ -327,50 +327,61 @@ bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
     return res;
 }
 
-void print_list(LinkedList *list)
+void print_list(LinkedList *list, void (*print)(void *))
 {
     validateList("print_list()", list, NULL, -1, NULL, false, false, false, false);
 
     Node *curr = list->head;
     int i = 0;
     printf("List elements:\n");
-    while (curr != NULL)
+    if (print != NULL)
     {
-        // qui ho i tipi base
-        if (!strcmp(list->data_type, "char"))
-            printf("%c\n", *(char *)curr->data);
-        else if (!strcmp(list->data_type, "signed char"))
-            printf("%hhd\n", *(signed char *)curr->data);
-        else if (!strcmp(list->data_type, "unsigned char"))
-            printf("%hhu\n", *(unsigned char *)curr->data);
-        else if (!strcmp(list->data_type, "short"))
-            printf("%hd\n", *(short *)curr->data);
-        else if (!strcmp(list->data_type, "unsigned short"))
-            printf("%hu\n", *(unsigned short *)curr->data);
-        else if (!strcmp(list->data_type, "int"))
-            printf("%d\n", *(int *)curr->data);
-        else if (!strcmp(list->data_type, "unsigned int"))
-            printf("%u\n", *(unsigned int *)curr->data);
-        else if (!strcmp(list->data_type, "long"))
-            printf("%ld\n", *(long *)curr->data);
-        else if (!strcmp(list->data_type, "unsigned long"))
-            printf("%lu\n", *(unsigned long *)curr->data);
-        else if (!strcmp(list->data_type, "long long"))
-            printf("%lld\n", *(long long *)curr->data);
-        else if (!strcmp(list->data_type, "unsigned long long"))
-            printf("%llu\n", *(unsigned long long *)curr->data);
-        else if (!strcmp(list->data_type, "float"))
-            printf("%f\n", *(float *)curr->data);
-        else if (!strcmp(list->data_type, "double"))
-            printf("%lf\n", *(double *)curr->data);
-        else if (!strcmp(list->data_type, "long double"))
-            printf("%Lf\n", *(long double *)curr->data);
-        else if (!strcmp(list->data_type, "char *"))
-            printf("%s\n", (char *)curr->data);
-        else
-            printf("%d- %s: 0x%0llX\n", ++i, list->data_type, curr->data);
+        while (curr != NULL)
+        {
+            print(curr->data);
+            curr = curr->next;
+        }
+    }
+    else
+    {
+        while (curr != NULL)
+        {
+            // qui ho i tipi base
+            if (!strcmp(list->data_type, "char"))
+                printf("%c\n", *(char *)curr->data);
+            else if (!strcmp(list->data_type, "signed char"))
+                printf("%hhd\n", *(signed char *)curr->data);
+            else if (!strcmp(list->data_type, "unsigned char"))
+                printf("%hhu\n", *(unsigned char *)curr->data);
+            else if (!strcmp(list->data_type, "short"))
+                printf("%hd\n", *(short *)curr->data);
+            else if (!strcmp(list->data_type, "unsigned short"))
+                printf("%hu\n", *(unsigned short *)curr->data);
+            else if (!strcmp(list->data_type, "int"))
+                printf("%d\n", *(int *)curr->data);
+            else if (!strcmp(list->data_type, "unsigned int"))
+                printf("%u\n", *(unsigned int *)curr->data);
+            else if (!strcmp(list->data_type, "long"))
+                printf("%ld\n", *(long *)curr->data);
+            else if (!strcmp(list->data_type, "unsigned long"))
+                printf("%lu\n", *(unsigned long *)curr->data);
+            else if (!strcmp(list->data_type, "long long"))
+                printf("%lld\n", *(long long *)curr->data);
+            else if (!strcmp(list->data_type, "unsigned long long"))
+                printf("%llu\n", *(unsigned long long *)curr->data);
+            else if (!strcmp(list->data_type, "float"))
+                printf("%f\n", *(float *)curr->data);
+            else if (!strcmp(list->data_type, "double"))
+                printf("%lf\n", *(double *)curr->data);
+            else if (!strcmp(list->data_type, "long double"))
+                printf("%Lf\n", *(long double *)curr->data);
+            else if (!strcmp(list->data_type, "char *"))
+                printf("%s\n", (char *)curr->data);
+            else
+                printf("%d- %s: 0x%0llX\n", ++i, list->data_type, curr->data);
 
-        curr = curr->next;
+            curr = curr->next;
+        }
     }
     if (list->size == 0)
         printf("List is empty.\n");
