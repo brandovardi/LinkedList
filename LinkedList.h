@@ -70,7 +70,7 @@
 #define GetNode(list, index) \
     get_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
 
-#define PrintList(list, ...) \
+#define PrintList(list) \
     print_list((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
 #define Size(list) \

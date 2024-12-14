@@ -12,9 +12,9 @@ typedef struct LinkedList
 
 static bool set_head(LinkedList *, void *);
 void validateList(char *, LinkedList *, char *, size_t, char *, bool, bool, bool, bool);
-void checkmalloc(void *);
+void validateMemoryAllocation(void *);
 
-void checkmalloc(void *ptr)
+void validateMemoryAllocation(void *ptr)
 {
     if (ptr == NULL)
     {
@@ -26,21 +26,15 @@ void checkmalloc(void *ptr)
 
 LinkedList *CreateList(size_t data_size, char *data_type)
 {
-    if (data_type == NULL)
+    if (data_type == NULL || data_size == 0)
     {
-        printf("Data Size is NULL");
-        fprintf(stderr, "Invalid Data Type! Exiting...\n");
-        exit(EXIT_FAILURE);
-    }
-    if (data_size == 0)
-    {
-        printf("Data Size is Zero");
-        fprintf(stderr, "Invalid Data Size! Exiting...\n");
+        fprintf(stderr, "Error while creating the list!\nPossible errors: invalid data type or data size.\nExiting...\n");
+        printStackTrace();
         exit(EXIT_FAILURE);
     }
     LinkedList *list = NULL;
     list = (LinkedList *)malloc(sizeof(LinkedList));
-    checkmalloc(list);
+    validateMemoryAllocation(list);
     list->head = NULL;
     list->last = NULL;
     list->size = 0;
@@ -58,13 +52,10 @@ bool insert_at(LinkedList *list, void *data, size_t index, char *data_type)
         res = set_head(list, data);
     else
     {
-        if (!strcmp(list->data_type, "char *"))
-            data = *(char **)data;
-
         Node *newNode = (Node *)malloc(sizeof(Node));
-        checkmalloc(newNode);
+        validateMemoryAllocation(newNode);
         newNode->data = malloc(list->data_size);
-        checkmalloc(newNode->data);
+        validateMemoryAllocation(newNode->data);
         memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
         newNode->next = NULL;
         newNode->prev = NULL;
@@ -104,13 +95,10 @@ bool add_first(LinkedList *list, void *data, char *data_type)
         res = set_head(list, data);
     else
     {
-        if (!strcmp(list->data_type, "char *"))
-            data = *(char **)data;
-
         Node *newNode = (Node *)malloc(sizeof(Node));
-        checkmalloc(newNode);
+        validateMemoryAllocation(newNode);
         newNode->data = malloc(list->data_size);
-        checkmalloc(newNode->data);
+        validateMemoryAllocation(newNode->data);
         newNode->next = NULL;
         newNode->prev = NULL;
         memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
@@ -144,13 +132,10 @@ bool add(LinkedList *list, void *data, char *data_type)
         res = set_head(list, data);
     else
     {
-        if (!strcmp(list->data_type, "char *"))
-            data = *(char **)data;
-
         Node *newNode = (Node *)malloc(sizeof(Node));
-        checkmalloc(newNode);
+        validateMemoryAllocation(newNode);
         newNode->data = malloc(list->data_size);
-        checkmalloc(newNode->data);
+        validateMemoryAllocation(newNode->data);
         memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
         newNode->next = NULL;
         newNode->prev = NULL;
@@ -172,9 +157,9 @@ static bool set_head(LinkedList *list, void *data)
 
     bool res = false;
     Node *newNode = (Node *)malloc(sizeof(Node));
-    checkmalloc(newNode);
+    validateMemoryAllocation(newNode);
     newNode->data = malloc(list->data_size);
-    checkmalloc(newNode->data);
+    validateMemoryAllocation(newNode->data);
     memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     newNode->next = NULL;
     newNode->prev = NULL;
@@ -291,13 +276,8 @@ bool replace_head(LinkedList *list, void *data, char *data_type)
 
     bool res = false;
 
-    if (!strcmp(list->data_type, "char *"))
-        data = *(char **)data;
-
-    free(list->head->data);
-    list->head->data = NULL;
-    list->head->data = malloc(list->data_size);
-    checkmalloc(list->head->data);
+    list->head->data = realloc(list->head->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
+    validateMemoryAllocation(list->head->data);
     memcpy(list->head->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     res = true;
 
@@ -310,13 +290,8 @@ bool replace_last(LinkedList *list, void *data, char *data_type)
 
     bool res = false;
 
-    if (!strcmp(list->data_type, "char *"))
-        data = *(char **)data;
-
-    free(list->last->data);
-    list->last->data = NULL;
-    list->last->data = malloc(list->data_size);
-    checkmalloc(list->last->data);
+    list->last->data = realloc(list->last->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
+    validateMemoryAllocation(list->last->data);
     memcpy(list->last->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     res = true;
 
@@ -328,11 +303,11 @@ bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
     validateList("replace_at()", list, data, index, data_type, true, true, true, true);
 
     bool res = false;
-    if (!strcmp(list->data_type, "char *"))
-        data = *(char **)data;
 
     if (!index)
         res = replace_head(list, data, data_type);
+    else if (index == size(list) - 1)
+        res = replace_last(list, data, data_type);
     else
     {
         int i;
@@ -342,7 +317,7 @@ bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
         free(curr->data);
         curr->data = NULL;
         curr->data = malloc(list->data_size);
-        checkmalloc(curr->data);
+        validateMemoryAllocation(curr->data);
         memcpy(curr->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
         res = true;
     }
@@ -389,7 +364,7 @@ void print_list(LinkedList *list)
         else if (!strcmp(list->data_type, "long double"))
             printf("%Lf\n", *(long double *)curr->data);
         else if (!strcmp(list->data_type, "char *"))
-            printf("%s\n", (char *)curr->data);
+            printf("%s\n", (char **)curr->data);
         else
             printf("%d- %s: 0x%0llX\n", ++i, list->data_type, curr->data);
 
@@ -405,11 +380,11 @@ Node *get_head_node(LinkedList *list)
 
     Node *newHead = NULL;
     newHead = (Node *)malloc(sizeof(Node));
-    checkmalloc(newHead);
+    validateMemoryAllocation(newHead);
     newHead->next = NULL;
     newHead->prev = NULL;
     newHead->data = malloc(list->data_size);
-    checkmalloc(newHead->data);
+    validateMemoryAllocation(newHead->data);
     memcpy(newHead->data, list->head->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)list->head->data) + 1) : list->data_size));
 
     return newHead;
@@ -421,11 +396,11 @@ Node *get_last_node(LinkedList *list)
 
     Node *newLast = NULL;
     newLast = (Node *)malloc(sizeof(Node));
-    checkmalloc(newLast);
+    validateMemoryAllocation(newLast);
     newLast->next = NULL;
     newLast->prev = NULL;
     newLast->data = malloc(list->data_size);
-    checkmalloc(newLast->data);
+    validateMemoryAllocation(newLast->data);
     memcpy(newLast->data, list->last->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)list->head->data) + 1) : list->data_size));
     if (!strcmp(list->data_type, "char"))
         newLast->data = *(char **)newLast->data;
@@ -450,11 +425,11 @@ Node *get_node(LinkedList *list, size_t index)
         for (i = 0; i < index && curr->next != NULL; curr = curr->next, i++)
             ;
         newNode = (Node *)malloc(sizeof(Node));
-        checkmalloc(newNode);
+        validateMemoryAllocation(newNode);
         newNode->next = NULL;
         newNode->prev = NULL;
         newNode->data = malloc(list->data_size);
-        checkmalloc(newNode->data);
+        validateMemoryAllocation(newNode->data);
         memcpy(newNode->data, curr->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)list->head->data) + 1) : list->data_size));
 
         if (!strcmp(list->data_type, "char"))

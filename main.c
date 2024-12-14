@@ -20,11 +20,16 @@ int main(int argc, char const *argv[])
     LinkedList *l1 = newLinkedList(char *);
     Macchina *m1 = (Macchina *)malloc(sizeof(Macchina));
 
-    Add(l1, "mia sottostringa");
-    char * g = "gg";
+    char *g = "gg";
+    char *c = "c";
+    char *l = "l";
+    Add(l1, c);
     Add(l1, g);
+    Add(l1, "mia sottostringa");
     PrintList(l1);
     ReplaceHead(l1, "ciao");
+    PrintList(l1);
+    ReplaceLast(l1, l);
     PrintList(l1);
 
     Add(l2, m1);
