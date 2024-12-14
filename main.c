@@ -1,7 +1,6 @@
 #define USER_TYPES DECLARE_TYPE(Macchina), DECLARE_TYPE(Moto)
 
 #include "LinkedList.h"
-#include <stdio.h>
 
 typedef struct Macchina
 {
@@ -36,9 +35,9 @@ int main()
 
     Node *f = get_node(list, size(list) - 1);
     int fgata = *(int *)f->data;
-    print_list(list);
+    PrintList(list);
 
-    Clear(list);
+    FreeList(list);
 
     print_list(list);
 

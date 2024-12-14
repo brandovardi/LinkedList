@@ -3,27 +3,31 @@
 #ifdef _WIN32
 void printStackTrace()
 {
-    void *stack[100];
-    unsigned short frames;
-    SYMBOL_INFO *symbol;
-    HANDLE process;
+    const size_t max_frames = 30; // Maximum number of frames
+    void *stack[max_frames];
+    HANDLE process = GetCurrentProcess();
 
-    process = GetCurrentProcess();
-    SymInitialize(process, NULL, TRUE);
+    // Initialize DbgHelp library
+    SymInitialize(process, NULL, true);
 
-    frames = CaptureStackBackTrace(0, 100, stack, NULL);
-    symbol = (SYMBOL_INFO *)calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1);
+    // Capture stack trace
+    USHORT frames = CaptureStackBackTrace(0, max_frames, stack, NULL);
+
+    // Allocate symbol info structure
+    SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char));
+    (symbol == NULL) ? (fprintf(stderr, "Error: malloc failed.\n"), exit(EXIT_FAILURE)) : 0;
+    
     symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 
+    // Print stack trace
     printf("Stack trace:\n");
-    for (unsigned short i = 0; i < frames; i++)
-    {
-        SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
-        printf("%i: %s - 0x%0X\n", frames - i - 1, symbol->Name, symbol->Address);
-    }
+    for (USHORT i = 0; i < frames; i++)
+        (SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol)) ? printf("[%i] %s - 0x%0llX\n", i, symbol->Name, symbol->Address) : printf("[%i] ??? - 0x%0llX\n", i, (DWORD64)(stack[i]));
 
+    // Cleanup
     free(symbol);
+    SymCleanup(process);
 }
 #else
 void printStackTrace()

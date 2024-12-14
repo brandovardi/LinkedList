@@ -368,7 +368,7 @@ void print_list(LinkedList *list)
         else if (!strcmp(list->data_type, "char *"))
             printf("%s\n", (char *)curr->data);
         else
-            printf("%d- %s: %p\n", ++i, list->data_type, curr->data);
+            printf("%d- %s: 0x%0llX\n", ++i, list->data_type, curr->data);
 
         curr = curr->next;
     }
@@ -447,7 +447,7 @@ char *get_list_type(LinkedList *list)
     return (list == NULL) ? NULL : list->data_type;
 }
 
-bool Clear(LinkedList *list)
+bool FreeList(LinkedList *list)
 {
     validateList("Clear()", list, NULL, -1, NULL, true, false, false, false);
 
