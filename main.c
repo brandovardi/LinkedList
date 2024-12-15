@@ -18,6 +18,7 @@ int main(int argc, char const *argv[])
     LinkedList *l2 = newLinkedList(Macchina *);
     LinkedList *l3 = newLinkedList(Moto *);
     LinkedList *l1 = newLinkedList(char *);
+    LinkedList *l4 = newLinkedList(LinkedList *);
     Macchina *m1 = (Macchina *)malloc(sizeof(Macchina));
 
     char *g = "gg";

@@ -1,6 +1,8 @@
 #include "LinkedList.h"
 #include "Exception.h"
 
+// implemento la lista nel .c per evitare di esporre la struttura della lista
+// sarebbe come mettere "private" la struttura della lista
 typedef struct LinkedList
 {
     struct Node *head;
@@ -26,7 +28,7 @@ void validateMemoryAllocation(void *ptr)
 
 LinkedList *CreateList(size_t data_size, char *data_type)
 {
-    if (data_type == NULL || data_size == 0)
+    if ((data_type == NULL || !strcmp(data_type, "")) || data_size == 0)
     {
         fprintf(stderr, "Error while creating the list!\nPossible errors: invalid data type or data size.\nExiting...\n");
         printStackTrace();
