@@ -129,6 +129,9 @@ bool add(LinkedList *list, void *data, char *data_type)
 {
     validateList("add()", list, data, -1, data_type, false, true, false, true);
 
+    // if (!strcmp(list->data_type, "char *"))
+    //     data = *(char **)data;
+
     bool res = false;
     if (list->head == NULL)
         res = set_head(list, data);
@@ -366,7 +369,9 @@ void print_list(LinkedList *list)
         else if (!strcmp(list->data_type, "long double"))
             printf("%Lf\n", *(long double *)curr->data);
         else if (!strcmp(list->data_type, "char *"))
-            printf("%s\n", (char **)curr->data);
+        {
+            printf("%p\n", *(char **)curr->data);
+        }
         else
             printf("%d- %s: 0x%0llX\n", ++i, list->data_type, curr->data);
 

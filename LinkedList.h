@@ -82,6 +82,9 @@
 #define GetListTypeOf(list) \
     get_list_type((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
+#define IS_ARRAY(x) \
+    __builtin_types_compatible_p(__typeof__(x), char[sizeof(x)])
+
 #define NULL_LIST printf("Exception - List is NULL.\n")
 #define EMPTY_LIST printf("Exception - List has no element.\n")
 #define NULL_DATA printf("Exception - Data is NULL.\n")

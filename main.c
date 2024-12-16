@@ -21,25 +21,26 @@ int main(int argc, char const *argv[])
     LinkedList *l4 = newLinkedList(LinkedList *);
     Macchina *m1 = (Macchina *)malloc(sizeof(Macchina));
 
+    Add(list, 1);
+    Add(list, 2);
+    Add(list, 90);
+
     char *g = "gg";
     char *c = "c";
     char *l = "l";
     Add(l1, c);
     Add(l1, g);
-    Add(l1, "mia sottostringa");
+    Add(l1, "x");
     PrintList(l1);
     ReplaceHead(l1, "ciao");
     PrintList(l1);
-    ReplaceLast(l1, l);
+    ReplaceLast(l1, "ciaoo");
+    Add(l1, "nuovo");
     PrintList(l1);
 
     Add(l2, m1);
     Add(l3, (Moto *)malloc(sizeof(Moto)));
     PrintList(l3);
-
-    Add(list, 1);
-    Add(list, 2);
-    Add(list, 90);
 
     const Node *f = get_node(list, size(list) - 1);
     const int fdata = *(int *)f->data;
