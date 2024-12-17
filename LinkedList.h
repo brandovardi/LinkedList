@@ -102,15 +102,15 @@ typedef struct LinkedList LinkedList;
 
 LinkedList *CreateList(size_t, char *);
 
-bool insert_at(LinkedList *, void *, size_t, char *); // usare la macro
-bool add_first(LinkedList *, void *, char *);         // usare la macro
-bool add(LinkedList *, void *, char *);               // usare la macro
-bool remove_last(LinkedList *);
-bool remove_head(LinkedList *);
-bool remove_at(LinkedList *, size_t);
-bool replace_head(LinkedList *, void *, char *);       // usare la macro
-bool replace_last(LinkedList *, void *, char *);       // usare la macro
-bool replace_at(LinkedList *, void *, size_t, char *); // usare la macro
+void insert_at(LinkedList *, void *, size_t, char *); // usare la macro
+void add_first(LinkedList *, void *, char *);         // usare la macro
+void add(LinkedList *, void *, char *);               // usare la macro
+void remove_last(LinkedList *);
+void remove_head(LinkedList *);
+void remove_at(LinkedList *, size_t);
+void replace_head(LinkedList *, void *, char *);       // usare la macro
+void replace_last(LinkedList *, void *, char *);       // usare la macro
+void replace_at(LinkedList *, void *, size_t, char *); // usare la macro
 void print_list(LinkedList *);
 Node *get_head_node(LinkedList *);
 Node *get_last_node(LinkedList *);
@@ -118,7 +118,7 @@ Node *get_node(LinkedList *, size_t);
 char *get_list_type(LinkedList *);
 int size(LinkedList *);
 
-bool FreeList(LinkedList *);
+void FreeList(LinkedList *);
 
 #define DECLARE_TYPE(type)                          \
     type:                                           \

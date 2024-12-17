@@ -45,13 +45,12 @@ LinkedList *CreateList(size_t data_size, char *data_type)
     return list;
 }
 
-bool insert_at(LinkedList *list, void *data, size_t index, char *data_type)
+void insert_at(LinkedList *list, void *data, size_t index, char *data_type)
 {
     validateList("insert_at()", list, data, index, data_type, false, true, true, true);
 
-    bool res = false;
     if (list->head == NULL)
-        res = set_head(list, data);
+        set_head(list, data);
     else
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
@@ -70,31 +69,26 @@ bool insert_at(LinkedList *list, void *data, size_t index, char *data_type)
             ;
         // se l'utente vuole inserire l'elemento in posizione zero
         if (curr == list->head)
-            res = add_first(list, data, data_type);
+            add_first(list, data, data_type);
         // se invece vuole inserirlo alla fine
         else if (curr->next == NULL)
-            res = add(list, data, data_type);
+            add(list, data, data_type);
         // infine se vuole inserirlo in una posizione intermedia
         else
         {
             newNode->prev = curr;
             newNode->next = curr->next;
             curr->next = newNode;
-            res = true;
         }
-        (!res) ?: (list->size++);
     }
-
-    return res;
 }
 
-bool add_first(LinkedList *list, void *data, char *data_type)
+void add_first(LinkedList *list, void *data, char *data_type)
 {
     validateList("add_first()", list, data, -1, data_type, false, true, false, true);
 
-    bool res = false;
     if (list->head == NULL)
-        res = set_head(list, data);
+        set_head(list, data);
     else
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
@@ -118,23 +112,20 @@ bool add_first(LinkedList *list, void *data, char *data_type)
             newNode->next = list->head;
             list->head = newNode;
         }
-        res = true;
         list->size++;
     }
-
-    return res;
 }
 
-bool add(LinkedList *list, void *data, char *data_type)
+void add(LinkedList *list, void *data, char *data_type)
 {
     validateList("add()", list, data, -1, data_type, false, true, false, true);
 
-    // if (!strcmp(list->data_type, "char *"))
-    //     data = *(char **)data;
+    char *tmp = *(char **)data;
+    if (!strcmp(list->data_type, "char *"))
+        data = *(char **)data;
 
-    bool res = false;
     if (list->head == NULL)
-        res = set_head(list, data);
+        set_head(list, data);
     else
     {
         Node *newNode = (Node *)malloc(sizeof(Node));
@@ -149,18 +140,14 @@ bool add(LinkedList *list, void *data, char *data_type)
         list->last->next = newNode;    // assegno al successivo dell'ultimo, il nuovo nodo
         list->last = list->last->next; // faccio diventare il nuovo nodo l'ultimo della lista
 
-        res = true;
         list->size++;
     }
-
-    return res;
 }
 
 static bool set_head(LinkedList *list, void *data)
 {
     validateList("set_head()", list, data, -1, NULL, false, true, false, false);
 
-    bool res = false;
     Node *newNode = (Node *)malloc(sizeof(Node));
     validateMemoryAllocation(newNode);
     newNode->data = malloc(list->data_size);
@@ -173,20 +160,16 @@ static bool set_head(LinkedList *list, void *data)
     list->last = list->head;
 
     list->size++;
-    res = true;
-
-    return res;
 }
 
-bool remove_last(LinkedList *list)
+void remove_last(LinkedList *list)
 {
     validateList("remove_last()", list, NULL, -1, NULL, true, false, false, false);
 
-    bool res = false;
     Node *last = list->last;
     // se la lista ha solo un elemento, quindi esiste soltanto la testa
     if (list->last == list->head)
-        res = remove_head(list);
+        remove_head(list);
     else
     {
         list->last = list->last->prev;
@@ -200,16 +183,12 @@ bool remove_last(LinkedList *list)
         last = NULL;
         res = true;
     }
-    (res && list->size > 0) ? (list->size--) : 0;
-
-    return res;
 }
 
-bool remove_head(LinkedList *list)
+void remove_head(LinkedList *list)
 {
     validateList("remove_head()", list, NULL, -1, NULL, true, false, false, false);
 
-    bool res = false;
     // se la lista ha soltanto un elemento, quindi ha soltanto la testa
     if (list->head->next == NULL)
     {
@@ -234,23 +213,19 @@ bool remove_head(LinkedList *list)
         free(list->head->prev);
         list->head->prev = NULL;
     }
-    res = true;
     (list->size <= 0) ?: (list->size--);
-
-    return res;
 }
 
-bool remove_at(LinkedList *list, size_t index)
+void remove_at(LinkedList *list, size_t index)
 {
     validateList("remove_at()", list, NULL, index, NULL, true, false, true, false);
 
-    bool res = false;
     // controllo subito se vuole eliminare la testa, quindi se index == 0
     if (!index)
-        res = remove_head(list);
+        remove_head(list);
     // e controlo subito anche se vuole eliminare l'ultimo elemento
     else if (index >= size(list) - 1)
-        res = remove_last(list);
+        remove_last(list);
     // infine se vuole eliminare un elemento nel mezzo
     else
     {
@@ -268,51 +243,35 @@ bool remove_at(LinkedList *list, size_t index)
         // infine libero la memoria dell'elemento eliminato
         free(curr);
         curr = NULL;
-        res = true;
     }
-    (res && list->size > 0) ? (list->size--) : 0;
-
-    return res;
 }
 
-bool replace_head(LinkedList *list, void *data, char *data_type)
+void replace_head(LinkedList *list, void *data, char *data_type)
 {
     validateList("replace_head()", list, data, -1, data_type, true, true, false, true);
-
-    bool res = false;
 
     list->head->data = realloc(list->head->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     validateMemoryAllocation(list->head->data);
     memcpy(list->head->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
-    res = true;
-
-    return res;
 }
 
-bool replace_last(LinkedList *list, void *data, char *data_type)
+void replace_last(LinkedList *list, void *data, char *data_type)
 {
     validateList("replace_last()", list, data, -1, data_type, true, true, false, true);
-
-    bool res = false;
 
     list->last->data = realloc(list->last->data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
     validateMemoryAllocation(list->last->data);
     memcpy(list->last->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
-    res = true;
-
-    return res;
 }
 
-bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
+void replace_at(LinkedList *list, void *data, size_t index, char *data_type)
 {
     validateList("replace_at()", list, data, index, data_type, true, true, true, true);
 
-    bool res = false;
-
     if (!index)
-        res = replace_head(list, data, data_type);
+        replace_head(list, data, data_type);
     else if (index == size(list) - 1)
-        res = replace_last(list, data, data_type);
+        replace_last(list, data, data_type);
     else
     {
         int i;
@@ -324,10 +283,7 @@ bool replace_at(LinkedList *list, void *data, size_t index, char *data_type)
         curr->data = malloc(list->data_size);
         validateMemoryAllocation(curr->data);
         memcpy(curr->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
-        res = true;
     }
-
-    return res;
 }
 
 void print_list(LinkedList *list)
@@ -456,11 +412,10 @@ char *get_list_type(LinkedList *list)
     return (list == NULL) ? NULL : list->data_type;
 }
 
-bool FreeList(LinkedList *list)
+void FreeList(LinkedList *list)
 {
     validateList("Clear()", list, NULL, -1, NULL, true, false, false, false);
 
-    bool res = false;
     Node *curr = list->head;
     while (curr != NULL)
     {
@@ -471,10 +426,7 @@ bool FreeList(LinkedList *list)
     }
     list->head = NULL;
     list->last = NULL;
-    res = true;
     list->size = 0;
-
-    return res;
 }
 
 void validateList(char *funName, LinkedList *list, char *data, size_t index, char *datatype, bool checkhead, bool is_data, bool is_index, bool is_datatype)
