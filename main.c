@@ -37,6 +37,8 @@ int main(int argc, char const *argv[])
     ReplaceLast(l1, "ciaoo");
     Add(l1, "nuovo");
     PrintList(l1);
+    RemoveLast(l1);
+    PrintList(l1);
 
     char *asd = "asd";
     Add(l1, asd);

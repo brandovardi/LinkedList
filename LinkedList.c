@@ -120,9 +120,9 @@ void add(LinkedList *list, void *data, char *data_type)
 {
     validateList("add()", list, data, -1, data_type, false, true, false, true);
 
-    char *tmp = *(char **)data;
-    if (!strcmp(list->data_type, "char *"))
-        data = *(char **)data;
+    // char *tmp = *(char **)data;
+    // if (!strcmp(list->data_type, "char *"))
+    //     data = *(char **)data;
 
     if (list->head == NULL)
         set_head(list, data);
@@ -173,15 +173,10 @@ void remove_last(LinkedList *list)
     else
     {
         list->last = list->last->prev;
-        free(list->last->next);
         list->last->next = NULL;
         free(last->data);
-        last->data = NULL;
-        free(last->prev);
-        last->prev = NULL;
         free(last);
-        last = NULL;
-        res = true;
+        (list->size <= 0) ?: (list->size--);
     }
 }
 
@@ -193,11 +188,10 @@ void remove_head(LinkedList *list)
     if (list->head->next == NULL)
     {
         free(list->head->data);
-        list->head->data = NULL;
         free(list->head);
         list->head = NULL;
-        free(list->last);
         list->last = NULL;
+        list->size = 0;
     }
     // se invece ha più di un elemento
     else
@@ -212,8 +206,8 @@ void remove_head(LinkedList *list)
         list->head = headNext;
         free(list->head->prev);
         list->head->prev = NULL;
+        (list->size <= 0) ?: (list->size--);
     }
-    (list->size <= 0) ?: (list->size--);
 }
 
 void remove_at(LinkedList *list, size_t index)
@@ -243,6 +237,7 @@ void remove_at(LinkedList *list, size_t index)
         // infine libero la memoria dell'elemento eliminato
         free(curr);
         curr = NULL;
+        (list->size <= 0) ?: (list->size--);
     }
 }
 
