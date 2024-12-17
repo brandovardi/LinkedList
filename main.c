@@ -30,12 +30,16 @@ int main(int argc, char const *argv[])
     char *l = "l";
     Add(l1, c);
     Add(l1, g);
-    Add(l1, "x");
+    Add(l1, "y");
     PrintList(l1);
     ReplaceHead(l1, "ciao");
     PrintList(l1);
     ReplaceLast(l1, "ciaoo");
     Add(l1, "nuovo");
+    PrintList(l1);
+
+    char *asd = "asd";
+    Add(l1, asd);
     PrintList(l1);
 
     Add(l2, m1);
