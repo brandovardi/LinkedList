@@ -423,32 +423,32 @@ void FreeList(LinkedList *list)
 
 void validateList(char *funName, LinkedList *list, char *data, size_t index, char *datatype, bool checkhead, bool is_data, bool is_index, bool is_datatype)
 {
-    bool res = false;
+    bool check = false;
     if (list == NULL || (checkhead && list->head == NULL))
     {
         (list == NULL) ? NULL_LIST : EMPTY_LIST;
         fprintf(stderr, "Invalid List! Exiting...\n");
-        res = true;
+        check = true;
     }
     if (is_data && data == NULL)
     {
         NULL_DATA;
         fprintf(stderr, "Invalid Data! Exiting...\n");
-        res = true;
+        check = true;
     }
     if (is_index && index > list->size)
     {
         INDEX_OUT_OF_BOUND;
         fprintf(stderr, "Invalid Index! Exiting...\n");
-        res = true;
+        check = true;
     }
     if (is_datatype && (datatype == NULL || strcmp(list->data_type, datatype)))
     {
         INVALID_DATA_TYPE;
         fprintf(stderr, "Invalid Data Type! Exiting...\n");
-        res = true;
+        check = true;
     }
-    if (res)
+    if (check)
     {
         printf("Exception from: %s; ", funName);
         printStackTrace();
