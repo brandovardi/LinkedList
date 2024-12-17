@@ -197,15 +197,12 @@ void remove_head(LinkedList *list)
     else
     {
         // mi salvo il secondo elemento della lista
-        Node *headNext = list->head->next;
+        Node *head = list->head;
         // svuoto la testa e la elimino
-        free(list->head->data);
-        list->head->data = NULL;
-        free(list->head);
-        // assegno alla testa il secondo elemento, che è diventato il primo
-        list->head = headNext;
-        free(list->head->prev);
+        list->head = list->head->next;
         list->head->prev = NULL;
+        free(head->data);
+        free(head);
         (list->size <= 0) ?: (list->size--);
     }
 }
@@ -320,7 +317,7 @@ void print_list(LinkedList *list)
         else if (!strcmp(list->data_type, "long double"))
             printf("%Lf\n", *(long double *)curr->data);
         else if (!strcmp(list->data_type, "char *"))
-            printf("0x%0llX (trying reading data: %s)\n", (char **)curr->data, (char **)curr->data);
+            printf("0x%0llX (trying reading data from char*: %s)\n", (char **)curr->data, (char **)curr->data);
         else
             printf("%d- %s: 0x%0llX\n", ++i, list->data_type, curr->data);
 
