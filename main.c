@@ -1,5 +1,4 @@
 #define USER_TYPES DECLARE_TYPE(Macchina), DECLARE_TYPE(Moto)
-
 #include "LinkedList.h"
 
 typedef struct Macchina

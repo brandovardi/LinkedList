@@ -58,15 +58,12 @@
         replace_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, index, GetTypeOf(_tmp)); \
     }
 
-// return a copy of the Node referred to the head element of the list
 #define GetHeadNode(list) \
     get_head_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
 
-// return a copy of the Node referred to the last element of the list
 #define GetLastNode(list) \
     get_last_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : NULL))
 
-// anche qua scrivo un if ternario e ciclo tutta la lista finche non trovo
 #define GetNode(list, index) \
     get_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
 
@@ -81,9 +78,6 @@
 
 #define GetListTypeOf(list) \
     get_list_type((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
-
-#define IS_ARRAY(x) \
-    __builtin_types_compatible_p(__typeof__(x), char[sizeof(x)])
 
 #define NULL_LIST printf("Exception - List is NULL.\n")
 #define EMPTY_LIST printf("Exception - List has no element.\n")

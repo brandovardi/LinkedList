@@ -63,8 +63,6 @@ void insert_at(LinkedList *list, void *data, size_t index, char *data_type)
 
         Node *curr = list->head;
         int cnt;
-        // se l'utente ha inserito un numero più grande rispetto alla dimensione della lista
-        // non mi interessa e glielo faccio inserire alla fine, dopo l'ultimo
         for (cnt = 0; (cnt < index) && (curr->next != NULL); curr = curr->next, cnt++)
             ;
         // se l'utente vuole inserire l'elemento in posizione zero
