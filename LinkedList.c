@@ -433,9 +433,12 @@ void *pop(LinkedList *list)
 {
     validateList("pop()", list, NULL, 0, NULL, true, false, false, false);
 
-    void *data = list->head;
+    void *last = malloc(sizeof(void));
+    memcpy(last, list->last->data, list->data_size);
+    
+    remove_last(list);
 
-    return data;
+    return last;
 }
 
 size_t size(LinkedList *list)

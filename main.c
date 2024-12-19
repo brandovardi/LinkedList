@@ -46,6 +46,9 @@ int main(int argc, char const *argv[])
     AddLast(l1, asd);
     PrintList(l1);
 
+    int qwer = *(int *)Pop(list);
+    printf("qwer: %d\n", qwer);
+
     AddLast(l2, m1);
     AddLast(l3, (Moto *)malloc(sizeof(Moto)));
     PrintList(l3);
