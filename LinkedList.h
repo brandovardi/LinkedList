@@ -13,71 +13,62 @@
 #define newLinkedList(type) \
     CreateList(sizeof(*((type *)0)), #type)
 
-#define InsertAt(list, data, index)                                                                                 \
-    {                                                                                                               \
-        __typeof__(data) _tmp = (data);                                                                             \
-        insert_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, index, GetTypeOf(_tmp)); \
+#define InsertAt(list, data, index)                                \
+    {                                                              \
+        __typeof__(data) _tmp = (data);                            \
+        insert_at(CheckList(list), &_tmp, index, GetTypeOf(_tmp)); \
     }
 
-#define AddFirst(list, data)                                                                                 \
-    {                                                                                                        \
-        __typeof__(data) _tmp = (data);                                                                      \
-        add_first((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
+#define AddFirst(list, data)                                \
+    {                                                       \
+        __typeof__(data) _tmp = (data);                     \
+        add_first(CheckList(list), &_tmp, GetTypeOf(_tmp)); \
     }
 
-#define Add(list, data)                                                                                \
-    {                                                                                                  \
-        __typeof__(data) _tmp = (data);                                                                \
-        add((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
+#define AddLast(list, data)                                \
+    {                                                      \
+        __typeof__(data) _tmp = (data);                    \
+        add_last(CheckList(list), &_tmp, GetTypeOf(_tmp)); \
     }
 
-#define RemoveLast(list) \
-    remove_last((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
+#define Remove(list, index) \
+    remove_at(CheckList(list), index)
 
-#define RemoveHead(list) \
-    remove_head((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
-
-#define RemoveAt(list, index) \
-    remove_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
-
-#define ReplaceHead(list, data)                                                                                 \
-    {                                                                                                           \
-        __typeof__(data) _tmp = (data);                                                                         \
-        replace_head((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
+#define Set(list, data, index)                               \
+    {                                                        \
+        __typeof__(data) _tmp = (data);                      \
+        set(CheckList(list), &_tmp, index, GetTypeOf(_tmp)); \
     }
-
-#define ReplaceLast(list, data)                                                                                 \
-    {                                                                                                           \
-        __typeof__(data) _tmp = (data);                                                                         \
-        replace_last((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, GetTypeOf(_tmp)); \
-    }
-
-#define ReplaceAt(list, data, index)                                                                                 \
-    {                                                                                                                \
-        __typeof__(data) _tmp = (data);                                                                              \
-        replace_at((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), &_tmp, index, GetTypeOf(_tmp)); \
-    }
-
-#define GetHeadNode(list) \
-    get_head_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
-
-#define GetLastNode(list) \
-    get_last_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : NULL))
 
 #define GetNode(list, index) \
-    get_node((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)), index)
+    get_node(CheckList(list), index)
+
+#define Get(list, index) \
+    get(CheckList(list), index)
+
+#define Peek(list) \
+    peek(CheckList(list))
+
+#define Pop(list) \
+    pop(CheckList(list))
 
 #define PrintList(list) \
-    print_list((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
+    print_list(CheckList(list))
 
 #define Size(list) \
-    size((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
+    size(CheckList(list))
+
+// #define IndexOf(list, data)                                \
+//     {                                                      \
+//         __typeof__(data) _tmp = (data);                    \
+//         index_of(CheckList(list), &_tmp, GetTypeOf(_tmp)); \
+//     }
 
 #define SameType(a, b) \
     (__builtin_types_compatible_p(__typeof__(a), __typeof__(b)))
 
-#define GetListTypeOf(list) \
-    get_list_type((SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL)))
+#define CheckList(list) \
+    (SameType(list, LinkedList *) ? ((LinkedList *)(list)) : (NULL))
 
 #define NULL_LIST printf("Exception - List is NULL.\n")
 #define EMPTY_LIST printf("Exception - List has no element.\n")
@@ -96,21 +87,29 @@ typedef struct LinkedList LinkedList;
 
 LinkedList *CreateList(size_t, char *);
 
-void insert_at(LinkedList *, void *, size_t, char *); // usare la macro
-void add_first(LinkedList *, void *, char *);         // usare la macro
-void add(LinkedList *, void *, char *);               // usare la macro
-void remove_last(LinkedList *);
-void remove_head(LinkedList *);
+// insert a generic element in the list
+void insert_at(LinkedList *, void *, size_t, char *); // use the macro
+// add an element in front of the list
+void add_first(LinkedList *, void *, char *);         // use the macro
+// append an element at the end of the list
+void add_last(LinkedList *, void *, char *);          // use the macro
+// remove an element in the list at the specified index
 void remove_at(LinkedList *, size_t);
-void replace_head(LinkedList *, void *, char *);       // usare la macro
-void replace_last(LinkedList *, void *, char *);       // usare la macro
-void replace_at(LinkedList *, void *, size_t, char *); // usare la macro
+// replace an element in the list at the specified index
+void set(LinkedList *, void *, size_t, char *); // use the macro
+// attemtp to print the list
 void print_list(LinkedList *);
-Node *get_head_node(LinkedList *);
-Node *get_last_node(LinkedList *);
+// return the node of the list from the given index
 Node *get_node(LinkedList *, size_t);
-char *get_list_type(LinkedList *);
-int size(LinkedList *);
+// return the void * of the element at the specified index
+void *get(LinkedList *, size_t);
+// simply return the last element of the list
+void *peek(LinkedList *);
+// remove and return the last element of the list
+void *pop(LinkedList *);
+// return the size of the list, so the number of elements contained
+size_t size(LinkedList *);
+// int index_of(LinkedList *, void *, char *);
 
 void FreeList(LinkedList *);
 
