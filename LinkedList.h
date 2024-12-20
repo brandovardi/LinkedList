@@ -40,6 +40,12 @@
         set(CheckList(list), &_tmp, index, GetTypeOf(_tmp)); \
     }
 
+#define PeekFirst(list) \
+    peek_first(CheckList(list))
+
+#define PeekLast(list) \
+    peek_last(CheckList(list))
+
 #define GetNode(list, index) \
     get_node(CheckList(list), index)
 
@@ -58,11 +64,11 @@
 #define Size(list) \
     size(CheckList(list))
 
-// #define IndexOf(list, data)                                \
-//     {                                                      \
-//         __typeof__(data) _tmp = (data);                    \
-//         index_of(CheckList(list), &_tmp, GetTypeOf(_tmp)); \
-//     }
+#define IndexOf(list, data)                                \
+    {                                                      \
+        __typeof__(data) _tmp = (data);                    \
+        index_of(CheckList(list), &_tmp, GetTypeOf(_tmp)); \
+    }
 
 #define SameType(a, b) \
     (__builtin_types_compatible_p(__typeof__(a), __typeof__(b)))
@@ -111,8 +117,10 @@ void *peek_last(LinkedList *);
 void *pop(LinkedList *);
 // return the size of the list, so the number of elements contained
 size_t size(LinkedList *);
-// int index_of(LinkedList *, void *, char *);
+// return the index (if exist) of the element you want to find in the list
+int index_of(LinkedList *, void *, char *);
 
+// deallocate (free) all the memory assigned to the list
 void FreeList(LinkedList *);
 
 #define DECLARE_TYPE(type)                          \

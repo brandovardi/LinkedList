@@ -463,7 +463,7 @@ int index_of(LinkedList *list, void *data, char *data_type)
                 || (!strcmp(list->data_type, "long double") && *(long double*)curr->data == *(long double *)data))
                 index = i;
     }
-
+    
     return index;
 }
 
