@@ -9,7 +9,7 @@
 #ifndef _LINKEDLIST_H
 #define _LINKEDLIST_H
 
-// Il tipo passato viene forzato a essere un puntatore valido, garantendo un controllo implicito del tipo.
+// The passed type is forced to be a valid pointer, ensuring an implicit type check.
 #define newLinkedList(type) \
     CreateList(sizeof(*((type *)0)), #type)
 
@@ -95,28 +95,40 @@ LinkedList *CreateList(size_t, char *);
 
 // insert a generic element in the list
 void insert_at(LinkedList *, void *, size_t, char *); // use the macro
+
 // add an element in front of the list
 void add_first(LinkedList *, void *, char *);         // use the macro
+
 // append an element at the end of the list
 void add_last(LinkedList *, void *, char *);          // use the macro
+
 // remove an element in the list at the specified index
 void remove_at(LinkedList *, size_t);
+
 // replace an element in the list at the specified index
 void set(LinkedList *, void *, size_t, char *); // use the macro
+
 // attemtp to print the list
 void print_list(LinkedList *);
+
 // return the node of the list from the given index
 Node *get_node(LinkedList *, size_t);
+
 // return the void * of the element at the specified index
 void *get(LinkedList *, size_t);
+
 // simply return the first element of the list
 void *peek_first(LinkedList *);
+
 // simply return the last element of the list
 void *peek_last(LinkedList *);
+
 // remove and return the last element of the list
 void *pop(LinkedList *);
+
 // return the size of the list, so the number of elements contained
 size_t size(LinkedList *);
+
 // return the index (if exist) of the element you want to find in the list
 int index_of(LinkedList *, void *, char *);
 

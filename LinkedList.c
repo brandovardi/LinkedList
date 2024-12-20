@@ -1,14 +1,14 @@
 #include "LinkedList.h"
 #include "Exception.h"
 
-// implemento la lista nel .c per evitare di esporre la struttura della lista
-// sarebbe come mettere "private" la struttura della lista
+// implementing the list in the .c file to avoid exposing the list structure
+// it would be like making the list structure "private"
 typedef struct LinkedList
 {
     struct Node *head;
     struct Node *last;
     size_t size;
-    size_t data_size; // Dimensione di ogni elemento
+    size_t data_size; // Size of each element
     char *data_type;
 } LinkedList;
 
@@ -72,13 +72,13 @@ void insert_at(LinkedList *list, void *data, size_t index, char *data_type)
         int cnt;
         for (cnt = 0; (cnt < index) && (curr->next != NULL); curr = curr->next, cnt++)
             ;
-        // se l'utente vuole inserire l'elemento in posizione zero
+        // if the user wants to insert the element at position zero
         if (curr == list->head)
             add_first(list, data, data_type);
-        // se invece vuole inserirlo alla fine
+        // if instead he wants to insert it at the end
         else if (curr->next == NULL)
             add_last(list, data, data_type);
-        // infine se vuole inserirlo in una posizione intermedia
+        // finally if he wants to insert it in an intermediate position
         else
         {
             newNode->prev = curr;
@@ -103,10 +103,10 @@ void add_first(LinkedList *list, void *data, char *data_type)
         newNode->next = NULL;
         newNode->prev = NULL;
         memcpy(newNode->data, data, (!strcmp(list->data_type, "char *") ? (strlen((char *)data) + 1) : list->data_size));
-        // controllo se la testa esiste, quindi se la lista ha già un elemento
-        // se ha già una testa allora il newNode deve diventare la testa quindi
-        // faccio puntare al suo ->next la testa che sarebbe ora il primo elemento
-        // così che la testa diventi il secondo elemento
+        // check if the head exists, so if the list already has an element
+        // if it already has a head then the newNode must become the head so
+        // make its ->next point to the head which would now be the first element
+        // so that the head becomes the second element
         if (list->head == NULL)
         {
             list->head = newNode;
@@ -137,9 +137,9 @@ void add_last(LinkedList *list, void *data, char *data_type)
         newNode->next = NULL;
         newNode->prev = NULL;
 
-        newNode->prev = list->last;    // assgno al prec del nuovo nodo l'ultimo della lista
-        list->last->next = newNode;    // assegno al successivo dell'ultimo, il nuovo nodo
-        list->last = list->last->next; // faccio diventare il nuovo nodo l'ultimo della lista
+        newNode->prev = list->last;    // assign the previous of the new node to the last of the list
+        list->last->next = newNode;    // assign the next of the last to the new node
+        list->last = list->last->next; // make the new node the last of the list
 
         list->size++;
     }
@@ -168,7 +168,7 @@ static void remove_last(LinkedList *list)
     validateList("remove_at()->remove_last()", list, NULL, 0, NULL, true, false, false, false);
 
     Node *last = list->last;
-    // se la lista ha solo un elemento, quindi esiste soltanto la testa
+    // if the list has only one element, so there is only the head
     if (list->last == list->head)
         remove_first(list);
     else
@@ -185,7 +185,7 @@ static void remove_first(LinkedList *list)
 {
     validateList("remove_at()->remove_first()", list, NULL, 0, NULL, true, false, false, false);
 
-    // se la lista ha soltanto un elemento, quindi ha soltanto la testa
+    // if the list has only one element, so there is only the head
     if (list->head->next == NULL)
     {
         free(list->head->data);
@@ -194,12 +194,12 @@ static void remove_first(LinkedList *list)
         list->last = NULL;
         list->size = 0;
     }
-    // se invece ha più di un elemento
+    // if instead it has more than one element
     else
     {
-        // mi salvo il secondo elemento della lista
+        // save the second element of the list
         Node *head = list->head;
-        // svuoto la testa e la elimino
+        // clear the head and delete it
         list->head = list->head->next;
         list->head->prev = NULL;
         free(head->data);
@@ -212,27 +212,27 @@ void remove_at(LinkedList *list, size_t index)
 {
     validateList("remove_at()", list, NULL, index, NULL, true, false, true, false);
 
-    // controllo subito se vuole eliminare la testa, quindi se index == 0
+    // immediately check if the user wants to delete the head, so if index == 0
     if (!index)
         remove_first(list);
-    // e controlo subito anche se vuole eliminare l'ultimo elemento
+    // and also immediately check if the user wants to delete the last element
     else if (index >= size(list) - 1)
         remove_last(list);
-    // infine se vuole eliminare un elemento nel mezzo
+    // finally if the user wants to delete an element in the middle
     else
     {
         int cnt;
         Node *curr = list->head;
         for (cnt = 0; (curr->next != NULL) && (cnt < index); curr = curr->next, cnt++)
             ;
-        // inizio a svuotare il dato
+        // start clearing the data
         free(curr->data);
-        // modifico la lista eliminando l'elemento desiderato
+        // modify the list by deleting the desired element
         curr->next->prev = curr->prev;
         curr->prev->next = curr->next;
         curr->next = NULL;
         curr->prev = NULL;
-        // infine libero la memoria dell'elemento eliminato
+        // finally free the memory of the deleted element
         free(curr);
         curr = NULL;
         (list->size <= 0) ?: (list->size--);
@@ -463,7 +463,7 @@ int index_of(LinkedList *list, void *data, char *data_type)
                 || (!strcmp(list->data_type, "long double") && *(long double*)curr->data == *(long double *)data))
                 index = i;
     }
-    
+
     return index;
 }
 

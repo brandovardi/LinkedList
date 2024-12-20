@@ -1,24 +1,24 @@
-#define USER_TYPES DECLARE_TYPE(Macchina), DECLARE_TYPE(Moto)
+#define USER_TYPES DECLARE_TYPE(Car), DECLARE_TYPE(Bike)
 #include "LinkedList.h"
 
-typedef struct Macchina
+typedef struct Car
 {
     int tipo;
-} Macchina;
+} Car;
 
-typedef struct Moto
+typedef struct Bike
 {
     int tipo;
-} Moto;
+} Bike;
 
 int main(int argc, char const *argv[])
 {
     LinkedList *list = newLinkedList(int);
-    LinkedList *l2 = newLinkedList(Macchina *);
-    LinkedList *l3 = newLinkedList(Moto *);
+    LinkedList *l2 = newLinkedList(Car *);
+    LinkedList *l3 = newLinkedList(Bike *);
     LinkedList *l1 = newLinkedList(char *);
     LinkedList *l4 = newLinkedList(LinkedList *);
-    Macchina *m1 = (Macchina *)malloc(sizeof(Macchina));
+    Car *c1 = (Car *)malloc(sizeof(Car));
 
     AddLast(list, 1);
     AddLast(list, 2);
@@ -32,10 +32,10 @@ int main(int argc, char const *argv[])
     AddLast(l1, "y");
     
     PrintList(l1);
-    Set(l1, "ciao", 0);
+    Set(l1, "hello", 0);
     PrintList(l1);
-    Set(l1, "ciaoo", Size(list));
-    AddLast(l1, "nuovo");
+    Set(l1, "helloo", Size(list));
+    AddLast(l1, "newElement");
     PrintList(l1);
     Remove(l1, Size(list));
     PrintList(l1);
@@ -49,8 +49,8 @@ int main(int argc, char const *argv[])
     int qwer = *(int *)Pop(list);
     printf("qwer: %d\n", qwer);
 
-    AddLast(l2, m1);
-    AddLast(l3, (Moto *)malloc(sizeof(Moto)));
+    AddLast(l2, c1);
+    AddLast(l3, (Bike *)malloc(sizeof(Bike)));
     PrintList(l3);
 
     const Node *f = GetNode(list, Size(list) - 1);
@@ -60,7 +60,7 @@ int main(int argc, char const *argv[])
     FreeList(list);
     PrintList(list);
 
-    free(m1);
+    free(c1);
 
     return EXIT_SUCCESS;
 }
