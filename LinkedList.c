@@ -22,8 +22,6 @@ static void remove_last(LinkedList *);
 static void remove_first(LinkedList *);
 static Node *get_head_node(LinkedList *);
 static Node *get_last_node(LinkedList *);
-static void *get_head(LinkedList *);
-static void *get_last(LinkedList *);
 
 void validateMemoryAllocation(void *ptr)
 {
@@ -390,13 +388,13 @@ Node *get_node(LinkedList *list, size_t index)
     return newNode;
 }
 
-static void *get_head(LinkedList *list)
+void *peek_first(LinkedList *list)
 {
     validateList("get()->get_head()", list, NULL, 0, NULL, true, false, false, false);
     return list->head->data;
 }
 
-static void *get_last(LinkedList *list)
+void *peek_last(LinkedList *list)
 {
     validateList("get()->get_last()", list, NULL, 0, NULL, true, false, false, false);
     return list->last->data;
@@ -409,9 +407,9 @@ void *get(LinkedList *list, size_t index)
     void *data = NULL;
     int i;
     if (!index)
-        data = get_head(list);
+        data = peek_first(list);
     else if (index == size(list) - 1)
-        data = get_last(list);
+        data = peek_last(list);
     else
     {
         Node *curr = list->head;
@@ -420,13 +418,6 @@ void *get(LinkedList *list, size_t index)
         data = curr->data;
     }
     return data;
-}
-
-void *peek(LinkedList *list)
-{
-    validateList("peek()", list, NULL, 0, NULL, true, false, false, false);
-
-    return list->last->data;
 }
 
 void *pop(LinkedList *list)

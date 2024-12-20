@@ -103,8 +103,10 @@ void print_list(LinkedList *);
 Node *get_node(LinkedList *, size_t);
 // return the void * of the element at the specified index
 void *get(LinkedList *, size_t);
+// simply return the first element of the list
+void *peek_first(LinkedList *);
 // simply return the last element of the list
-void *peek(LinkedList *);
+void *peek_last(LinkedList *);
 // remove and return the last element of the list
 void *pop(LinkedList *);
 // return the size of the list, so the number of elements contained
