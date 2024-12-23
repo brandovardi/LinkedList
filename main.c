@@ -14,11 +14,11 @@ typedef struct Bike
 int main(int argc, char const *argv[])
 {
     LinkedList *list = newLinkedList(int);
-    LinkedList *l2 = newLinkedList(Car *);
+    LinkedList *l2 = newLinkedList(Car);
     LinkedList *l3 = newLinkedList(Bike *);
     LinkedList *l1 = newLinkedList(char *);
     LinkedList *l4 = newLinkedList(LinkedList *);
-    Car *c1 = (Car *)malloc(sizeof(Car));
+    Car c1 = {.tipo = 1};
 
     AddLast(list, 1);
     AddLast(list, 2);
@@ -30,7 +30,7 @@ int main(int argc, char const *argv[])
     AddLast(l1, c);
     AddLast(l1, g);
     AddLast(l1, "y");
-    
+
     PrintList(l1);
     Set(l1, "hello", 0);
     PrintList(l1);
@@ -50,6 +50,7 @@ int main(int argc, char const *argv[])
     printf("qwer: %d\n", qwer);
 
     AddLast(l2, c1);
+    PrintList(l2);
     AddLast(l3, (Bike *)malloc(sizeof(Bike)));
     PrintList(l3);
 
@@ -60,7 +61,7 @@ int main(int argc, char const *argv[])
     FreeList(list);
     PrintList(list);
 
-    free(c1);
+    // free(c1);
 
     return EXIT_SUCCESS;
 }
