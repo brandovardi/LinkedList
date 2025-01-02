@@ -61,8 +61,8 @@ int main(int argc, char const *argv[])
     FreeList(list);
     PrintList(list);
 
-    Car kl = *(Car *)PeekFirst(l2);
-    printf("%d\n", kl.tipo);
+    // Car kl = *(Car *)PeekFirst(l2);
+    printf("%d\n", *(Car *)PeekFirst(l2));
 
     // free(c1);
 
