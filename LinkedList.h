@@ -58,6 +58,10 @@
 #define Pop(list) \
     pop(CheckList(list))
 
+/**
+ * if you're trying to print a list of a custom type, or a char*
+ * you have to build your own print function
+ */
 #define PrintList(list) \
     print_list(CheckList(list))
 

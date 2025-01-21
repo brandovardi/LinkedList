@@ -1,6 +1,7 @@
 #include "Exception.h"
 
 #ifdef _WIN32
+
 void printStackTrace()
 {
     const size_t max_frames = 30; // Maximum number of frames
@@ -16,7 +17,7 @@ void printStackTrace()
     // Allocate symbol info structure
     SYMBOL_INFO *symbol = (SYMBOL_INFO *)malloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char));
     (symbol == NULL) ? (fprintf(stderr, "Error: malloc failed.\n"), exit(EXIT_FAILURE)) : 0;
-    
+
     symbol->MaxNameLen = 255;
     symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 
@@ -29,7 +30,9 @@ void printStackTrace()
     free(symbol);
     SymCleanup(process);
 }
+
 #elif __linux__
+
 void printStackTrace()
 {
     size_t max_frames = 30; // Numero massimo di frame desiderati
@@ -50,4 +53,5 @@ void printStackTrace()
     free(strings);
     free(array);
 }
+
 #endif

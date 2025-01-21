@@ -317,8 +317,6 @@ void print_list(LinkedList *list)
             printf("%lf\n", *(double *)curr->data);
         else if (!strcmp(list->data_type, "long double"))
             printf("%Lf\n", *(long double *)curr->data);
-        else if (!strcmp(list->data_type, "char *"))
-            printf("0x%0llX (trying reading data from char*: %s)\n", (char **)curr->data, (char **)curr->data);
         else
             printf("%d- %s: 0x%0llX\n", ++i, list->data_type, curr->data);
 
