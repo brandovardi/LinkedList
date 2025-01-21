@@ -216,7 +216,7 @@ void remove_at(LinkedList *list, size_t index)
     if (!index)
         remove_first(list);
     // and also immediately check if the user wants to delete the last element
-    else if (index >= size(list) - 1)
+    else if (index >= list->size - 1)
         remove_last(list);
     // finally if the user wants to delete an element in the middle
     else
@@ -263,7 +263,7 @@ void set(LinkedList *list, void *data, size_t index, char *data_type)
 
     if (!index)
         set_head(list, data, data_type);
-    else if (index == size(list) - 1)
+    else if (index == list->size - 1)
         set_last(list, data, data_type);
     else
     {
@@ -367,7 +367,7 @@ Node *get_node(LinkedList *list, size_t index)
     int i;
     if (!index)
         newNode = get_head_node(list);
-    else if (index == size(list) - 1)
+    else if (index == list->size - 1)
         newNode = get_last_node(list);
     else
     {
@@ -406,7 +406,7 @@ void *get(LinkedList *list, size_t index)
     int i;
     if (!index)
         data = peek_first(list);
-    else if (index == size(list) - 1)
+    else if (index == list->size - 1)
         data = peek_last(list);
     else
     {
@@ -435,6 +435,7 @@ size_t size(LinkedList *list)
     return (list != NULL) ? (list->size) : (NULL_LIST, 0);
 }
 
+// this function works only with primitive types
 int index_of(LinkedList *list, void *data, char *data_type)
 {
     validateList("index_of()", list, data, 0, data_type, true, true, false, true);

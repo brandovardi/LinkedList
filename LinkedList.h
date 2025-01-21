@@ -101,10 +101,10 @@ LinkedList *CreateList(size_t, char *);
 void insert_at(LinkedList *, void *, size_t, char *); // use the macro
 
 // add an element in front of the list
-void add_first(LinkedList *, void *, char *);         // use the macro
+void add_first(LinkedList *, void *, char *); // use the macro
 
 // append an element at the end of the list
-void add_last(LinkedList *, void *, char *);          // use the macro
+void add_last(LinkedList *, void *, char *); // use the macro
 
 // remove an element in the list at the specified index
 void remove_at(LinkedList *, size_t);
